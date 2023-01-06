@@ -1,7 +1,7 @@
-from typing import List, Optional, Literal, Set
+from typing import List, Optional, Literal
 from pydantic_xml import BaseXmlModel, attr, element, wrapped
-from pydantic import HttpUrl
-from enum import Enum, IntEnum
+from pydantic import HttpUrl, constr
+from enum import IntEnum
 
 NSMAP = {"": "http://www.arin.net/regrws/core/v1"}
 
@@ -24,13 +24,11 @@ class AlgorithmEnum(IntEnum):
     ECDSA256 = 13
     ECDSA384 = 14
 
-# class ISO3166_1(BaseXmlModel):
-#     __root__: Set[str] = element(tag="iso3166-1")
 
 class Iso3166_1(BaseXmlModel, tag="iso3166-1", nsmap=NSMAP):
     name: str = element()  # type: ignore
-    code2: str = element()  # type: ignore
-    code3: str = element()  # type: ignore
+    code2: constr(min_length=2, max_length=2, to_upper=True) = element()  # type: ignore
+    code3: constr(min_length=3, max_length=3, to_upper=True) = element()  # type: ignore
     e164: int = element()  # type: ignore
 
 
@@ -45,17 +43,13 @@ class PocLinkRef(BaseXmlModel, tag="pocLinkRef", nsmap=NSMAP):
     handle: str = attr()  # type: ignore
 
 
-# class Company(BaseXmlModel):
-#     socials: List[Social] = wrapped('contacts/socials', element(tag='social'))
-#
-
 class Org(BaseXmlModel, tag="org", nsmap=NSMAP):
     iso3166_1: Iso3166_1  # type: ignore
-    street_address: List[MultiLineElement] = wrapped('streetAddress', element(tag="line") ) # type: ignore
+    street_address: List[MultiLineElement] = wrapped("streetAddress", element(tag="line"))  # type: ignore
     city: str = element()  # type: ignore
-    iso3166_2: Optional[str] = element(tag="iso3166-2")  # type: ignore
+    iso3166_2: Optional[constr(max_length=3, to_upper=True)] = element(tag="iso3166-2")  # type: ignore
     postal_code: Optional[str] = element(tag="postalCode")  # type: ignore
-    comment: Optional[List[MultiLineElement]]  = wrapped('comment', element(tag="line") )# type: ignore
+    comment: Optional[List[MultiLineElement]] = wrapped("comment", element(tag="line"))  # type: ignore
 
     handle: Optional[str] = element()  # type: ignore
     registration_date: Optional[str] = element(tag="registrationDate")  # type: ignore
@@ -64,4 +58,20 @@ class Org(BaseXmlModel, tag="org", nsmap=NSMAP):
     tax_id: Optional[str] = element(tag="taxId")  # type: ignore
     org_url: Optional[HttpUrl] = element(tag="orgUrl")  # type: ignore
 
-    poc_links: List[PocLinkRef] = wrapped('pocLinks', element(tag="pocLinkRef"))# type: ignore
+    poc_links: List[PocLinkRef] = wrapped("pocLinks", element(tag="pocLinkRef"))  # type: ignore
+
+
+class Customer(BaseXmlModel, tag="customer", nsmap=NSMAP):
+    customer_name: str = element(tag="customerName")  # type: ignore
+    iso3166_1: Iso3166_1  # type: ignore
+    street_address: List[MultiLineElement] = wrapped("streetAddress", element(tag="line"))  # type: ignore
+    city: str = element()  # type: ignore
+    iso3166_2: Optional[constr(max_length=3, to_upper=True)] = element(tag="iso3166-2")  # type: ignore
+    postal_code: Optional[str] = element(tag="postalCode")  # type: ignore
+    comment: Optional[List[MultiLineElement]] = wrapped("comment", element(tag="line"))  # type: ignore
+
+    handle: Optional[str] = element()  # type: ignore
+    parent_org_handle: Optional[str] = element(tag="parentOrgHandle")  # type: ignore
+
+    registration_date: Optional[str] = element(tag="registrationDate")  # type: ignore
+    private_customer: Optional[bool] = element(tag="privateCustomer")  # type: ignore
