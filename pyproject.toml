@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "pyregrws"
+version = "0.1.1"
+description = "Python library to retrieve and modify records within ARIN's database through their Reg-RWS service"
+authors = ["Jonathan Senecal <contact@jonathansenecal.com>"]
+license = "Apache 2.0"
+packages = [
+    { include = "regrws" },
+]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+requests = "^2.28.1"
+pydantic = "^1.10.2"
+pydantic-xml  = {extras = ["lxml"], version = "^0.4.0"}
+
+[tool.poetry.dev-dependencies]
+ipython = "^8.8.0"
+pytest = "^7.2.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
