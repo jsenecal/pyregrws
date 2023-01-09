@@ -50,3 +50,12 @@ CUSTOMER_PAYLOAD = \
         <registrationDate>Mon Nov 07 14:04:28 EST 2011</registrationDate>
         <privateCustomer>false</privateCustomer>
     </customer>"""
+
+NETBLOCK_PAYLOAD = \
+    """<netBlock xmlns="http://www.arin.net/regrws/core/v1" >
+        <type>A</type>
+        <description>DESCRIPTION</description>
+        <startAddress>010.000.000.000</startAddress>
+        <endAddress>010.000.000.255</endAddress>
+        <cidrLength>24</cidrLength>
+    </netBlock>"""
