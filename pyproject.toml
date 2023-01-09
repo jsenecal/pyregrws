@@ -12,6 +12,7 @@ packages = [
 python = "^3.10"
 requests = "^2.28.1"
 pydantic = "^1.10.2"
+# pydantic-xml  = {git = "git@github.com:jsenecal/pydantic-xml.git", branch = "devel", extras = ["lxml"]}
 pydantic-xml  = {extras = ["lxml"], version = "^0.4.0"}
 
 [tool.poetry.dev-dependencies]
@@ -22,6 +23,30 @@ pytest = "^7.2.0"
 filterwarnings = [
     "ignore::DeprecationWarning:pydantic_xml.*:",
 ]
+
+[tool.pyright]
+reportGeneralTypeIssues = "information"
+
+[tool.mypy]
+plugins = [
+  "pydantic.mypy"
+]
+
+follow_imports = "silent"
+warn_redundant_casts = true
+warn_unused_ignores = true
+disallow_any_generics = true
+check_untyped_defs = true
+no_implicit_reexport = true
+
+# for strict mypy: (this is the tricky one :-))
+disallow_untyped_defs = true
+
+[tool.pydantic-mypy]
+init_forbid_extra = true
+init_typed = true
+warn_required_dynamic_aliases = true
+warn_untyped_fields = true
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
