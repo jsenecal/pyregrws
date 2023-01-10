@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import List, Optional, Literal
 from pydantic_xml import BaseXmlModel, attr, element, wrapped
-from pydantic import HttpUrl, constr, conint, IPvAnyAddress
+from pydantic import HttpUrl, constr, conint, IPvAnyAddress, root_validator
 from enum import IntEnum
 
 from .types import ZeroPaddedIPvAnyAddress
@@ -32,6 +32,11 @@ class AlgorithmEnum(IntEnum):
     SHA512 = 10
     ECDSA256 = 13
     ECDSA384 = 14
+
+
+class IPVersionEnum(IntEnum):
+    IPV4 = 4
+    IPV6 = 6
 
 
 class Iso3166_1(BaseXmlModel, tag="iso3166-1", nsmap=NSMAP):
@@ -89,9 +94,53 @@ class Customer(BaseXmlModel, tag="customer", nsmap=NSMAP):
 
     private_customer: Optional[bool] = element(tag="privateCustomer")
 
+
 class NetBlock(BaseXmlModel, tag="netBlock", nsmap=NSMAP):
-    type: Literal["A", "AF", "AP", "AR", "AV", "DA", "FX", "IR", "IU", "LN", "LX", "PV", "PX", "RD", "RN", "RV", "RX", "S"] = element()
+    type: Literal[
+        "A", "AF", "AP", "AR", "AV", "DA", "FX", "IR", "IU", "LN", "LX", "PV", "PX", "RD", "RN", "RV", "RX", "S"
+    ] = element()
     description: Optional[str] = element()
-    start_address: ZeroPaddedIPvAnyAddress  = element(tag="startAddress") 
-    end_address: ZeroPaddedIPvAnyAddress  = element(tag="endAddress")
-    cidr_length: cidr_length_type = element(tag="cidrLength")
+    start_address: ZeroPaddedIPvAnyAddress = element(tag="startAddress")
+    end_address: Optional[ZeroPaddedIPvAnyAddress] = element(tag="endAddress")
+    cidr_length: Optional[cidr_length_type] = element(tag="cidrLength")
+
+    @root_validator(pre=True)
+    def check_payload(cls, values):
+        results = values.get("end_address") is None, values.get("cidr_length") is None
+        if all(results):
+            raise ValueError("either `end_address` or `cidr_length` must be provided")
+        return values
+
+
+class OriginAS(BaseXmlModel, tag="originAS", nsmap=NSMAP):
+    asn: str
+
+
+class Net(BaseXmlModel, tag="net", nsmap=NSMAP):
+    version: IPVersionEnum = element()
+    comment: Optional[List[MultiLineElement]] = wrapped("comment", element(tag="line"))
+
+    org_handle: Optional[str] = element(tag="orgHandle")
+    customer_handle: Optional[str] = element(tag="customerHandle")
+
+    handle: Optional[str] = element()
+    registration_date: Optional[str] = element(tag="registrationDate")
+
+    net_name: Optional[str] = element(tag="netName")
+    net_blocks: Optional[List[NetBlock]] = wrapped("netBlocks", element(tag="netBlock"))
+
+    parent_net_handle: Optional[str] = element(tag="parentNetHandle")
+
+    origin_ases: Optional[List[OriginAS]] = wrapped("originASes", element(tag="originAS", default_factory=list))
+
+    poc_links: List[PocLinkRef] = wrapped("pocLinks", element(tag="pocLinkRef"))
+
+    @root_validator(pre=True)
+    def check_related_handle(cls, values):
+        results = values.get("org_handle"), values.get("customer_handle")
+        results_are_none = map(lambda x: x is None, results)
+        if all(results_are_none):
+            raise ValueError("either `org_handle` or `customer_handle` must be provided")
+        if all(results):
+            raise ValueError("`org_handle` and `customer_handle` are mutually exclusive")
+        return values

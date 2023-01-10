@@ -59,3 +59,32 @@ NETBLOCK_PAYLOAD = \
         <endAddress>010.000.000.255</endAddress>
         <cidrLength>24</cidrLength>
     </netBlock>"""
+
+NET_PAYLOAD = \
+    """<net xmlns="http://www.arin.net/regrws/core/v1" >
+        <version>4</version>
+        <comment>
+            <line number = "1">Line 1</line>
+        </comment>
+        <registrationDate>Tue Jan 25 16:17:18 EST 2011</registrationDate>
+        <handle>NET-10-0-0-0-1</handle>
+        <netBlocks>
+            <netBlock>
+                <type>A</type>
+                <description>DESCRIPTION</description>
+                <startAddress>010.000.000.000</startAddress>
+                <endAddress>010.000.000.255</endAddress>
+                <cidrLength>24</cidrLength>
+            </netBlock>
+        </netBlocks>
+        <customerHandle>C12341234</customerHandle>
+        <parentNetHandle>PARENTNETHANDLE</parentNetHandle>
+        <netName>NETNAME</netName>
+        <originASes>
+            <originAS>AS102</originAS>
+        </originASes>
+        <pocLinks>
+            <pocLinkRef description="Tech" function="T" handle="EXAMPLETECH-ARIN"/>
+            <pocLinkRef description="Admin" function="AD" handle="EXAMPLEADMIN-ARIN"/>
+        </pocLinks>
+    </net>"""

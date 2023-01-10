@@ -1,16 +1,12 @@
 import pytest
 
-from regrws.models import Customer, NetBlock, Org
-from regrws.xml_encoder import IPaddressXmlEncoder
+from regrws.models import Customer, NetBlock, Org, Net
 
-from .payloads import CUSTOMER_PAYLOAD, NETBLOCK_PAYLOAD, ORG_PAYLOAD
+from .helpers import assert_xml_equal
+from .payloads import CUSTOMER_PAYLOAD, NETBLOCK_PAYLOAD, ORG_PAYLOAD, NET_PAYLOAD
 
 
-PARAMETERS = [
-    (Org, ORG_PAYLOAD),
-    (Customer, CUSTOMER_PAYLOAD),
-    (NetBlock, NETBLOCK_PAYLOAD),
-]
+PARAMETERS = [(Org, ORG_PAYLOAD), (Customer, CUSTOMER_PAYLOAD), (NetBlock, NETBLOCK_PAYLOAD), (Net, NET_PAYLOAD)]
 
 
 @pytest.mark.parametrize(
@@ -29,8 +25,7 @@ class TestModels:
         assert org is not None
 
     def test_to_xml(self, org):
-        org_xml = org.to_xml(
-            encoder=IPaddressXmlEncoder(), pretty_print=True, encoding="UTF-8"
-        ).decode()
-        print("\n"+org_xml)
+        org_xml = org.to_xml(pretty_print=True, encoding="UTF-8", skip_empty=True).decode()
+        print("\n" + org_xml)
         assert org_xml is not False
+        # assert_xml_equal(org_xml, payload)
