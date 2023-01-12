@@ -501,7 +501,7 @@ six = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "fc4872850ef6caf66752f406ad5f42fa8392149fbb8b2eb6db13c30a8c4c3748"
+content-hash = "adcf0928543597e8cfd5602ca995096c86ba26effc455139680584f9012a2fe4"
 
 [metadata.files]
 appnope = [
