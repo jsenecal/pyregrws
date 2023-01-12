@@ -147,3 +147,24 @@ class Net(BaseXmlModel, tag="net", nsmap=NSMAP):
         if all(results):
             raise ValueError("`org_handle` and `customer_handle` are mutually exclusive")
         return values
+
+
+class ErrorComponent(BaseXmlModel, tag="component", nsmap=NSMAP):
+    name: str = element()
+    message: str = element()
+
+
+class Error(BaseXmlModel, tag="error", nsmap=NSMAP):
+    message: str = element()
+    code: Literal[
+        "E_SCHEMA_VALIDATION",
+        "E_ENTITY_VALIDATION",
+        "E_OBJECT_NOT_FOUND",
+        "E_AUTHENTICATION",
+        "E_NOT_REMOVEABLE",
+        "E_BAD_REQUEST",
+        "E_OUTAGE",
+        "E_UNSPECIFIED",
+    ] = element()
+    components: List[ErrorComponent] = wrapped("components", element(tag="component"))
+    additionnal_info: List[str] = wrapped("additionalInfo", element(tag="message", default_factory=list))

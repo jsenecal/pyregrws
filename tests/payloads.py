@@ -88,3 +88,18 @@ NET_PAYLOAD = \
             <pocLinkRef description="Admin" function="AD" handle="EXAMPLEADMIN-ARIN"/>
         </pocLinks>
     </net>"""
+
+ERROR_PAYLOAD = \
+    """<error xmlns="http://www.arin.net/regrws/core/v1" >
+        <message>MESSAGE</message>
+        <code>E_SCHEMA_VALIDATION</code>
+        <components>
+            <component>
+                <name>NAME</name>
+                <message>MESSAGE</message>
+            </component>
+        </components>
+        <additionalInfo>
+            <message>MESSAGE</message>
+        </additionalInfo>
+    </error>"""
