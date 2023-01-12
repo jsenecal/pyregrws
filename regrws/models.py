@@ -1,8 +1,10 @@
 from __future__ import annotations
-from typing import List, Optional, Literal
-from pydantic_xml import BaseXmlModel, attr, element, wrapped
-from pydantic import HttpUrl, constr, conint, IPvAnyAddress, root_validator
+
 from enum import IntEnum
+from typing import List, Literal, Optional
+
+from pydantic import HttpUrl, conint, constr, root_validator
+from pydantic_xml.model import BaseXmlModel, attr, element, wrapped
 
 from .types import ZeroPaddedIPvAnyAddress
 
@@ -11,6 +13,7 @@ code2_type = constr(min_length=2, max_length=2, to_upper=True)
 code3_type = constr(min_length=3, max_length=3, to_upper=True)
 iso3166_2_type = constr(max_length=3, to_upper=True)
 cidr_length_type = conint(ge=0, le=128)
+
 
 NSMAP = {"": "http://www.arin.net/regrws/core/v1"}
 

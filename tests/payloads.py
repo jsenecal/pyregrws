@@ -15,8 +15,8 @@ ORG_PAYLOAD = \
         <comment>
             <line number = "1">Line 1</line>
         </comment>
-        <registrationDate>Mon Nov 07 14:04:28 EST 2011</registrationDate>
         <handle>ARIN</handle>
+        <registrationDate>Mon Nov 07 14:04:28 EST 2011</registrationDate>
         <orgName>ORGNAME</orgName>
         <dbaName>DBANAME</dbaName>
         <taxId>TAXID</taxId>
@@ -36,7 +36,6 @@ CUSTOMER_PAYLOAD = \
             <code3>USA</code3>
             <e164>1</e164>
         </iso3166-1>
-        <handle>CUST</handle>
         <streetAddress>
             <line number = "1">Line 1</line>
         </streetAddress>
@@ -46,6 +45,7 @@ CUSTOMER_PAYLOAD = \
         <comment>
             <line number = "1">Line 1</line>
         </comment>
+        <handle>CUST</handle>
         <parentOrgHandle>PARENTORGHANDLE</parentOrgHandle>
         <registrationDate>Mon Nov 07 14:04:28 EST 2011</registrationDate>
         <privateCustomer>false</privateCustomer>
