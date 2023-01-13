@@ -24,13 +24,13 @@ PARAMETERS = (
 )
 class TestModels:
     @pytest.fixture
-    def instance(self, model, payload):
+    def instance(self, model, payload, cov):
         return model.from_xml(payload)
 
-    def test_from_xml(self, instance):
+    def test_from_xml(self, instance, cov):
         assert instance is not None
 
-    def test_to_xml(self, instance):
+    def test_to_xml(self, instance, cov):
         instance_xml = instance.to_xml(
             encoder=ARINXmlEncoder(), pretty_print=True, encoding="UTF-8", skip_empty=True
         ).decode()
