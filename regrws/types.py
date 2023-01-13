@@ -21,8 +21,8 @@ class ZeroPaddedIPvAnyAddress(IPvAnyAddress):
 
         try:
             host_bytes = value.split('.')
-            valid = [int(b) for b in host_bytes]
-            valid = [str(b) for b in valid if b >= 0 and b<=255]
+            valid_bytes = [int(b) for b in host_bytes]
+            valid = [str(b) for b in valid_bytes if b >= 0 and b<=255]
             if len(host_bytes) == 4 and len(valid) == 4:
                 return IPv4Address(".".join(valid))
             raise IPvAnyAddressError()
