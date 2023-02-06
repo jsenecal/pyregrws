@@ -6,8 +6,8 @@ from pydantic.error_wrappers import ValidationError
 from regrws.api.core import Response, Session
 
 
-from regrws.models import Org
-from .payloads import ORG_PAYLOAD
+from regrws.models import Org, Error
+from .payloads import ORG_PAYLOAD, ERROR_PAYLOAD
 
 
 def test_valid_parser_and_model(cov):
@@ -15,7 +15,7 @@ def test_valid_parser_and_model(cov):
     res = Response(Session({200: Org}))
     res.status_code = 200
     res._content = ORG_PAYLOAD.encode()
-    assert res.model
+    assert res.instance
 
 
 def test_invalid_model(cov):
@@ -24,7 +24,7 @@ def test_invalid_model(cov):
     res.status_code = 200
     res._content = b'<org xmlns="http://www.arin.net/regrws/core/v1" ></org>'
     with pytest.raises(ValidationError) as exc:
-        res.model
+        res.instance
     exc.match("type=value_error.missing")
 
 
@@ -43,13 +43,37 @@ def test_requests_wrapper(mocked_responses):
     )
     resp = requests.get("https://reg.ote.arin.net/rest/org/ARIN?apikey=APIKEY")
     assert resp.status_code == 200
-    with Session(
-        {200: Org}, headers={"accept": "application/xml"}
-    ) as session:
+
+    with Session({200: Org}) as session:
         org_id = "ARIN"
-        res = session.get(
-            f"https://reg.ote.arin.net/rest/org/{org_id}",  params={"apikey": "APIKEY"}
+        res: Response = session.get(
+            f"https://reg.ote.arin.net/rest/org/{org_id}", params={"apikey": "APIKEY"}
         )
+        assert res.status_code == 200
         res.raise_for_status()
-        org: Org = res.model
-        assert org is not None
+        org: Org = res.instance
+        assert org
+        assert isinstance(org, Org)
+
+def test_requests_wrapper_with_errors(mocked_responses):
+    mocked_responses.get(
+        "https://reg.ote.arin.net/rest/org/ARIN?apikey=APIKEY",
+        body=ERROR_PAYLOAD.encode(),
+        status=400,
+        content_type="application/xml",
+    )
+    resp = requests.get("https://reg.ote.arin.net/rest/org/ARIN?apikey=APIKEY")
+    assert resp.status_code == 400
+
+    with Session({400: Error}) as session:
+        org_id = "ARIN"
+        res: Response = session.get(
+            f"https://reg.ote.arin.net/rest/org/{org_id}", params={"apikey": "APIKEY"}
+        )
+        assert res.status_code == 400
+        with pytest.raises(requests.HTTPError):
+            res.raise_for_status()
+        res.raise_for_unknown_status()
+        err: Error = res.instance
+        assert Error
+        assert isinstance(err, Error)

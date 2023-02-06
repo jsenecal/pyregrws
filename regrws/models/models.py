@@ -1,12 +1,13 @@
 from __future__ import annotations
 
 from enum import IntEnum
-from typing import List, Literal, Optional
+from typing import ClassVar, List, Literal, Optional
 
 from pydantic import HttpUrl, conint, constr, root_validator
-from pydantic_xml.model import BaseXmlModel, attr, element, wrapped
+from pydantic_xml.model import attr, element, wrapped
 
-from .types import ZeroPaddedIPvAnyAddress
+from regrws.models.types import ZeroPaddedIPvAnyAddress
+from regrws.models.base import BaseModel, NSMAP
 
 # types
 code2_type = constr(min_length=2, max_length=2, to_upper=True)
@@ -14,8 +15,7 @@ code3_type = constr(min_length=3, max_length=3, to_upper=True)
 iso3166_2_type = constr(max_length=3, to_upper=True)
 cidr_length_type = conint(ge=0, le=128)
 
-
-NSMAP = {"": "http://www.arin.net/regrws/core/v1"}
+__all__ = ["Customer", "Org", "POC", "NetBlock", "Net", "Error"]
 
 
 ALGORITHM_NAMES_MAP = {
@@ -42,31 +42,48 @@ class IPVersionEnum(IntEnum):
     IPV6 = 6
 
 
-class Iso3166_1(BaseXmlModel, tag="iso3166-1", nsmap=NSMAP):
+class Iso3166_1(BaseModel, tag="iso3166-1", nsmap=NSMAP):
     name: str = element()
     code2: code2_type = element()
     code3: code3_type = element()
     e164: int = element()
 
 
-class MultiLineElement(BaseXmlModel):
+class MultiLineElement(BaseModel):
     number: int = attr()
     line: str
-class PhoneType(BaseXmlModel, tag="type", nsmap=NSMAP):
-    description:str = element()
+
+
+class PhoneType(BaseModel, tag="type", nsmap=NSMAP):
+    description: str = element()
     code: Literal["O", "M", "F"] = element()
 
-class Phone(BaseXmlModel, tag="phone", nsmap=NSMAP):
+
+class Phone(BaseModel, tag="phone", nsmap=NSMAP):
     type: PhoneType = element()
     number: str = element()
     extension: Optional[str] = element()
 
-class PocLinkRef(BaseXmlModel, tag="pocLinkRef", nsmap=NSMAP):
-    description: Literal["Admin", "Tech", "Routing"] = attr()
-    function: Literal["AD", "T", "R"] = attr()
+
+class PocLinkRef(BaseModel, tag="pocLinkRef", nsmap=NSMAP):
+    description: Literal[
+        "Abuse",
+        "Admin",
+        "NOC",
+        "Routing",
+        "Tech",
+    ] = attr()
+    function: Literal[
+        "AB",
+        "AD",
+        "N",
+        "R",
+        "T",
+    ] = attr()
     handle: str = attr()
 
-class POC(BaseXmlModel, tag="poc", nsmap=NSMAP):
+
+class POC(BaseModel, tag="poc", nsmap=NSMAP):
     iso3166_1: Iso3166_1
     street_address: List[MultiLineElement] = wrapped("streetAddress", element(tag="line"))
     city: str = element()
@@ -78,7 +95,7 @@ class POC(BaseXmlModel, tag="poc", nsmap=NSMAP):
     handle: Optional[str] = element()
     registration_date: Optional[str] = element(tag="registrationDate")
 
-    contact_type: Literal["PERSON", "ROLE"]= element(tag="contactType")
+    contact_type: Literal["PERSON", "ROLE"] = element(tag="contactType")
 
     company_name: Optional[str] = element(tag="companyName")
 
@@ -88,6 +105,8 @@ class POC(BaseXmlModel, tag="poc", nsmap=NSMAP):
 
     phones: List[Phone] = wrapped("phones", element(tag="phone"))
 
+    _endpoint: ClassVar[str] = "/poc"
+
     @root_validator(pre=True)
     def check_contact_type_and_payload(cls, values):
         contact_type = values.get("contact_type")
@@ -95,15 +114,15 @@ class POC(BaseXmlModel, tag="poc", nsmap=NSMAP):
         if contact_type == "ROLE":
             msg = "this POC is a ROLE POC"
             if not values.get("company_name"):
-                raise ValueError(msg+", `company_name` is required")
+                raise ValueError(msg + ", `company_name` is required")
             if not values.get("last_name"):
-                raise ValueError(msg+", the role name must be entered in the 'last_name' field")
+                raise ValueError(msg + ", the role name must be entered in the 'last_name' field")
             if values.get("first_name"):
-                raise ValueError(msg+", `first_name` must be left blank")
+                raise ValueError(msg + ", `first_name` must be left blank")
         return values
 
 
-class Org(BaseXmlModel, tag="org", nsmap=NSMAP):
+class Org(BaseModel, tag="org", nsmap=NSMAP):
     iso3166_1: Iso3166_1
     street_address: List[MultiLineElement] = wrapped("streetAddress", element(tag="line"))
     city: str = element()
@@ -122,8 +141,10 @@ class Org(BaseXmlModel, tag="org", nsmap=NSMAP):
 
     poc_links: List[PocLinkRef] = wrapped("pocLinks", element(tag="pocLinkRef"))
 
+    _endpoint: ClassVar[str] = "/org"
 
-class Customer(BaseXmlModel, tag="customer", nsmap=NSMAP):
+
+class Customer(BaseModel, tag="customer", nsmap=NSMAP):
     customer_name: str = element(tag="customerName")
 
     iso3166_1: Iso3166_1
@@ -140,10 +161,29 @@ class Customer(BaseXmlModel, tag="customer", nsmap=NSMAP):
 
     private_customer: Optional[bool] = element(tag="privateCustomer")
 
+    _endpoint: ClassVar[str] = "/customer"
 
-class NetBlock(BaseXmlModel, tag="netBlock", nsmap=NSMAP):
+
+class NetBlock(BaseModel, tag="netBlock", nsmap=NSMAP):
     type: Literal[
-        "A", "AF", "AP", "AR", "AV", "DA", "FX", "IR", "IU", "LN", "LX", "PV", "PX", "RD", "RN", "RV", "RX", "S"
+        "A",
+        "AF",
+        "AP",
+        "AR",
+        "AV",
+        "DA",
+        "FX",
+        "IR",
+        "IU",
+        "LN",
+        "LX",
+        "PV",
+        "PX",
+        "RD",
+        "RN",
+        "RV",
+        "RX",
+        "S",
     ] = element()
     description: Optional[str] = element()
     start_address: ZeroPaddedIPvAnyAddress = element(tag="startAddress")
@@ -158,11 +198,11 @@ class NetBlock(BaseXmlModel, tag="netBlock", nsmap=NSMAP):
         return values
 
 
-class OriginAS(BaseXmlModel, tag="originAS", nsmap=NSMAP):
+class OriginAS(BaseModel, tag="originAS", nsmap=NSMAP):
     asn: str
 
 
-class Net(BaseXmlModel, tag="net", nsmap=NSMAP):
+class Net(BaseModel, tag="net", nsmap=NSMAP):
     version: IPVersionEnum = element()
     comment: Optional[List[MultiLineElement]] = wrapped("comment", element(tag="line"))
 
@@ -177,7 +217,9 @@ class Net(BaseXmlModel, tag="net", nsmap=NSMAP):
 
     parent_net_handle: Optional[str] = element(tag="parentNetHandle")
 
-    origin_ases: Optional[List[OriginAS]] = wrapped("originASes", element(tag="originAS", default_factory=list))
+    origin_ases: Optional[List[OriginAS]] = wrapped(
+        "originASes", element(tag="originAS", default_factory=list)
+    )
 
     poc_links: List[PocLinkRef] = wrapped("pocLinks", element(tag="pocLinkRef"))
 
@@ -192,12 +234,12 @@ class Net(BaseXmlModel, tag="net", nsmap=NSMAP):
         return values
 
 
-class ErrorComponent(BaseXmlModel, tag="component", nsmap=NSMAP):
+class ErrorComponent(BaseModel, tag="component", nsmap=NSMAP):
     name: str = element()
     message: str = element()
 
 
-class Error(BaseXmlModel, tag="error", nsmap=NSMAP):
+class Error(BaseModel, tag="error", nsmap=NSMAP):
     message: str = element()
     code: Literal[
         "E_SCHEMA_VALIDATION",
@@ -210,4 +252,6 @@ class Error(BaseXmlModel, tag="error", nsmap=NSMAP):
         "E_UNSPECIFIED",
     ] = element()
     components: List[ErrorComponent] = wrapped("components", element(tag="component"))
-    additionnal_info: List[str] = wrapped("additionalInfo", element(tag="message", default_factory=list))
+    additionnal_info: List[str] = wrapped(
+        "additionalInfo", element(tag="message", default_factory=list)
+    )
