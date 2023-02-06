@@ -34,3 +34,4 @@ MANIFEST
 
 # Coverage
 .coverage
+coverage.xml
