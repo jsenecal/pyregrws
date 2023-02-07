@@ -742,14 +742,14 @@ email = ["email-validator (>=1.0.3)"]
 
 [[package]]
 name = "pydantic-xml"
-version = "0.5.0"
-description = "pydantic xml serialization/deserialization extension"
+version = "0.6.0"
+description = "pydantic xml extension"
 category = "main"
 optional = false
 python-versions = ">=3.8,<4.0"
 files = [
-    {file = "pydantic_xml-0.5.0-py3-none-any.whl", hash = "sha256:bdac2f171fab9c21cfb20048d7e832bc0939fd2ab79ac9ac2f3d169e9c03a089"},
-    {file = "pydantic_xml-0.5.0.tar.gz", hash = "sha256:4fd6a846d3861113b7065a836a6ea4b6cb469caf95bb101e35aee28eb38305a7"},
+    {file = "pydantic_xml-0.6.0-py3-none-any.whl", hash = "sha256:7a0e4b8ea972b1425126e298c2572e4dbaecb82905b5d9b119a98b7d59fb0204"},
+    {file = "pydantic_xml-0.6.0.tar.gz", hash = "sha256:ba7f47602187e18c5403376e51275d593833815517915202205223f33044967b"},
 ]
 
 [package.dependencies]
@@ -757,6 +757,7 @@ lxml = {version = ">=4.9.1,<5.0.0", optional = true, markers = "extra == \"lxml\
 pydantic = ">=1.9.0,<2.0.0"
 
 [package.extras]
+docs = ["Sphinx (>=5.3.0,<6.0.0)", "furo (>=2022.12.7,<2023.0.0)", "sphinx-copybutton (>=0.5.1,<0.6.0)", "sphinx_design (>=0.3.0,<0.4.0)", "toml (>=0.10.2,<0.11.0)"]
 lxml = ["lxml (>=4.9.1,<5.0.0)"]
 
 [[package]]
@@ -1039,4 +1040,4 @@ devenv = ["black", "coverage", "flake8", "zest.releaser[recommended]"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "d72b27f25ca69f35dc2601db4934f0e2ab5fb4168c57363083edb514734659dd"
+content-hash = "5224527ec4a78d656c2b9c8f409d4c4a701805ca9aa8ec88c61d7f9cd5d3e64f"
