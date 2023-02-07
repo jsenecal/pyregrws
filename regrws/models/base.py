@@ -29,4 +29,10 @@ class BaseModel(BaseXmlModel):
         if self._api and self._endpoint:
             return f"{self._api.base_url}{self._endpoint}/{getattr(self, self._handle)}"
 
+    def save(self):
+        return self._manager.save(self)
+    
+    def delete(self):
+        return self._manager.delete(self)
+
     

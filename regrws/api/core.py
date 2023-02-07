@@ -1,9 +1,10 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Dict, Optional
+from typing import TYPE_CHECKING, Dict, Literal, Optional
 
 import requests
 
+from regrws.arin_xml_encoder import ARINXmlEncoder
 from regrws.models import Customer, Error, Org
 from regrws.settings import Settings
 
@@ -94,28 +95,17 @@ class Manager:
         self.model = model
         self.api = api
         self.session = Session({200: model, 400: Error})
+        self.url_params = {"apikey": self.api.apikey.get_secret_value()}
 
     @property
     def endpoint_url(self):
         if self.api and self.model._endpoint:
             return f"{self.api.base_url}{self.model._endpoint}"
 
-    @property
-    def absolute_url(self):
-        try:
-            return f"{self.endpoint_url}/{getattr(self.model, self.model._handle)}"
-        except AttributeError:
-            pass
-
-    # create
-    def create(self, *args, **kwargs):
-        raise NotImplementedError
-
-    # retrieve
-    def get(self, handle: str):
-        handle = handle.upper()
+    def _do(self, verb: Literal["get", "put", "delete"], url: str, data: bytes | None = None):
         with self.session as s:
-            res: Response = s.get(self.endpoint_url + f"/{handle}", params={"apikey": self.api.apikey.get_secret_value()})  # type: ignore
+            session_method = getattr(s, verb)
+            res: Response = session_method(url, params=self.url_params, data=data)  # type: ignore
             res.raise_for_unknown_status()
 
             if res.instance:
@@ -123,10 +113,21 @@ class Manager:
                 res.instance._manager = self
             return res.instance
 
-    # update
-    def save(self, *args, **kwargs):
+    def create(self, *args, **kwargs):
         raise NotImplementedError
 
+    # retrieve
+    def get(self, handle: str):
+        handle = handle.upper()
+        url = self.endpoint_url + f"/{handle}"
+        return self._do("get", url)
+
+    # update
+    def save(self, instance: type[BaseModel]):
+        url = instance.absolute_url
+        return self._do("put", url, instance.to_xml(encoder=ARINXmlEncoder(), encoding="UTF-8", skip_empty=True))
+
     # delete
-    def delete(self, *args, **kwargs):
-        raise NotImplementedError
+    def delete(self, instance: type[BaseModel]):
+        url = instance.absolute_url
+        return self._do("delete", url)
