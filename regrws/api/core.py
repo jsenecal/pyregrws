@@ -121,11 +121,12 @@ class Manager:
         instance._manager = self
         instance._api = self.api
         url = instance.absolute_url
-        return self._do(
-            "post",
-            url,
-            instance.to_xml(encoder=ARINXmlEncoder(), encoding="UTF-8", skip_empty=True),
-        )
+        if url:
+            return self._do(
+                "post",
+                url,
+                instance.to_xml(encoder=ARINXmlEncoder(), encoding="UTF-8", skip_empty=True),
+            )
 
     # retrieve
     def get(self, handle: str):
@@ -137,11 +138,13 @@ class Manager:
     # update
     def save(self, instance: type[BaseModel]):
         url = instance.absolute_url
-        return self._do(
-            "put", url, instance.to_xml(encoder=ARINXmlEncoder(), encoding="UTF-8", skip_empty=True)
-        )
+        if url:
+            return self._do(
+                "put", url, instance.to_xml(encoder=ARINXmlEncoder(), encoding="UTF-8", skip_empty=True)
+            )
 
     # delete
     def delete(self, instance: type[BaseModel]):
         url = instance.absolute_url
-        return self._do("delete", url)
+        if url:
+            return self._do("delete", url)
