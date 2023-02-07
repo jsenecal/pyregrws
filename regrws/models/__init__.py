@@ -18,7 +18,9 @@ __all__ = ["Customer", "Org", "Poc", "NetBlock", "Net", "Error"]
 
 class Poc(BaseModel, tag="poc", nsmap=NSMAP):
     iso3166_1: Iso31661
-    street_address: List[MultiLineElement] = wrapped("streetAddress", element(tag="line"))
+    street_address: List[MultiLineElement] = wrapped(
+        "streetAddress", element(tag="line")
+    )
     city: str = element()
     iso3166_2: Optional[iso3166_2_type] = element(tag="iso3166-2")
     postal_code: Optional[str] = element(tag="postalCode")
@@ -49,7 +51,9 @@ class Poc(BaseModel, tag="poc", nsmap=NSMAP):
             if not values.get("company_name"):
                 raise ValueError(msg + ", `company_name` is required")
             if not values.get("last_name"):
-                raise ValueError(msg + ", the role name must be entered in the 'last_name' field")
+                raise ValueError(
+                    msg + ", the role name must be entered in the 'last_name' field"
+                )
             if values.get("first_name"):
                 raise ValueError(msg + ", `first_name` must be left blank")
         return values
@@ -57,7 +61,9 @@ class Poc(BaseModel, tag="poc", nsmap=NSMAP):
 
 class Org(BaseModel, tag="org", nsmap=NSMAP):
     iso3166_1: Iso31661
-    street_address: List[MultiLineElement] = wrapped("streetAddress", element(tag="line"))
+    street_address: List[MultiLineElement] = wrapped(
+        "streetAddress", element(tag="line")
+    )
     city: str = element()
     iso3166_2: Optional[iso3166_2_type] = element(tag="iso3166-2")
     postal_code: Optional[str] = element(tag="postalCode")
@@ -143,9 +149,13 @@ class Net(BaseModel, tag="net", nsmap=NSMAP):
         results = values.get("org_handle"), values.get("customer_handle")
         results_are_none = map(lambda x: x is None, results)
         if all(results_are_none):
-            raise ValueError("either `org_handle` or `customer_handle` must be provided")
+            raise ValueError(
+                "either `org_handle` or `customer_handle` must be provided"
+            )
         if all(results):
-            raise ValueError("`org_handle` and `customer_handle` are mutually exclusive")
+            raise ValueError(
+                "`org_handle` and `customer_handle` are mutually exclusive"
+            )
         return values
 
 

@@ -50,7 +50,9 @@ class Session(requests.Session):
     amongst other things.
     """
 
-    def __init__(self, handlers: Dict[int, xmlmodel_type], headers: Optional[dict] = None):
+    def __init__(
+        self, handlers: Dict[int, xmlmodel_type], headers: Optional[dict] = None
+    ):
         super().__init__()
         self.handlers = handlers
         self.hooks["response"].append(self.response_hook)

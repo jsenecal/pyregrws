@@ -8,12 +8,12 @@ if TYPE_CHECKING:
     from regrws.models.base import BaseModel
     from regrws.api.core import Api
 
+
 class BaseManager:
     def __init__(self, api: Api, model: type[BaseModel]) -> None:
         # prevent circular import
         from regrws.models import Error
         from regrws.api.core import Session
-
 
         self.model = model
         self.api = api
@@ -26,7 +26,10 @@ class BaseManager:
             return f"{self.api.base_url}{self.model._endpoint}"
 
     def _do(
-        self, verb: Literal["get", "post", "put", "delete"], url: str, data: bytes | None = None
+        self,
+        verb: Literal["get", "post", "put", "delete"],
+        url: str,
+        data: bytes | None = None,
     ):
         with self.session as s:
             session_method = getattr(s, verb)
@@ -47,7 +50,9 @@ class BaseManager:
             return self._do(
                 "post",
                 url,
-                instance.to_xml(encoder=ARINXmlEncoder(), encoding="UTF-8", skip_empty=True),
+                instance.to_xml(
+                    encoder=ARINXmlEncoder(), encoding="UTF-8", skip_empty=True
+                ),
             )
 
     # retrieve
@@ -64,7 +69,9 @@ class BaseManager:
             return self._do(
                 "put",
                 url,
-                instance.to_xml(encoder=ARINXmlEncoder(), encoding="UTF-8", skip_empty=True),
+                instance.to_xml(
+                    encoder=ARINXmlEncoder(), encoding="UTF-8", skip_empty=True
+                ),
             )
 
     # delete
