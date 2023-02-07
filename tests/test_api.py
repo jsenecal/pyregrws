@@ -1,8 +1,9 @@
 import pytest
 import responses
 
+from regrws.api import constants
 from regrws.api.core import API
-from regrws.models import POC, Customer, Error, Net, NetBlock, Org
+from regrws.models import POC, Customer, Net, Org
 from regrws.models.base import BaseModel
 
 from .payloads import (
@@ -37,7 +38,7 @@ class TestAPI:
         return model.from_xml(payload)
 
     def test_manager_get(self, mocked_responses, instance: BaseModel, payload, manager, cov):
-        api = API(api_key="APIKEY", base_url="https://reg.ote.arin.net/")
+        api = API(api_key="APIKEY", base_url=constants.BASE_URL_DEFAULT)
         assert api
 
         instance._api = api
@@ -46,7 +47,7 @@ class TestAPI:
             f"{instance.absolute_url}?apikey=APIKEY",
             body=payload.encode(),
             status=200,
-            content_type="application/xml",
+            content_type=constants.CONTENT_TYPE,
         )
 
         manager = getattr(api, manager)
@@ -54,7 +55,7 @@ class TestAPI:
         assert inst
 
     def test_manager_put(self, mocked_responses, instance: BaseModel, payload, manager, cov):
-        api = API(api_key="APIKEY", base_url="https://reg.ote.arin.net/")
+        api = API(api_key="APIKEY", base_url=constants.BASE_URL_DEFAULT)
         assert api
 
         instance._api = api
@@ -64,14 +65,14 @@ class TestAPI:
             f"{instance.absolute_url}?apikey=APIKEY",
             body=payload.encode(),
             status=200,
-            content_type="application/xml",
+            content_type=constants.CONTENT_TYPE,
         )
 
         instance.save()
         assert instance
 
     def test_manager_delete(self, mocked_responses, instance: BaseModel, payload, manager, cov):
-        api = API(api_key="APIKEY", base_url="https://reg.ote.arin.net/")
+        api = API(api_key="APIKEY", base_url=constants.BASE_URL_DEFAULT)
         assert api
 
         instance._api = api
@@ -81,26 +82,25 @@ class TestAPI:
             f"{instance.absolute_url}?apikey=APIKEY",
             body=payload.encode(),
             status=200,
-            content_type="application/xml",
+            content_type=constants.CONTENT_TYPE,
         )
 
         instance.delete()
         assert instance
 
-
     def test_manager_create(self, mocked_responses, instance: BaseModel, payload, manager, cov):
-        api = API(api_key="APIKEY", base_url="https://reg.ote.arin.net/")
+        api = API(api_key="APIKEY", base_url=constants.BASE_URL_DEFAULT)
         assert api
         instance._api = api
-        
+
         manager = getattr(api, manager)
 
         mocked_responses.post(
             f"{instance.absolute_url}?apikey=APIKEY",
             body=payload.encode(),
             status=200,
-            content_type="application/xml",
+            content_type=constants.CONTENT_TYPE,
         )
 
-        new_insance=manager.create(**instance.dict())
+        new_insance = manager.create(**instance.dict())
         assert new_insance

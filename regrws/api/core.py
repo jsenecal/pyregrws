@@ -8,7 +8,7 @@ from regrws.arin_xml_encoder import ARINXmlEncoder
 from regrws.models import Customer, Error, Org, Net, POC
 from regrws.settings import Settings
 
-from .constants import BASE_URL_DEFAULT
+from . import constants
 
 if TYPE_CHECKING:
     from regrws.models.base import BaseModel
@@ -38,7 +38,7 @@ class Response(requests.Response):
     def raise_for_unknown_status(self):
         """Raises :class:`HTTPError`, if one occurred."""
 
-        if not self.status_code in self.session.handlers.keys():
+        if self.status_code not in self.session.handlers.keys():
             super().raise_for_status()
 
     @classmethod
@@ -57,7 +57,7 @@ class Session(requests.Session):
         super().__init__()
         self.handlers = handlers
         self.hooks["response"].append(self.response_hook)
-        self.headers.update({"accept": "application/xml"})
+        self.headers.update({"accept": constants.CONTENT_TYPE})
         if headers:
             self.headers.update(headers)
 
@@ -76,7 +76,7 @@ class API:
         settings: Settings | None = None,
     ):
         if settings is None:
-            kwargs = dict(base_url=BASE_URL_DEFAULT)
+            kwargs = dict(base_url=constants.BASE_URL_DEFAULT)
             if base_url is not None:
                 kwargs["base_url"] = base_url
             if api_key is not None:

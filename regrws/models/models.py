@@ -42,7 +42,7 @@ class IPVersionEnum(IntEnum):
     IPV6 = 6
 
 
-class Iso3166_1(BaseModel, tag="iso3166-1", nsmap=NSMAP):
+class Iso31661(BaseModel, tag="iso3166-1", nsmap=NSMAP):
     name: str = element()
     code2: code2_type = element()
     code3: code3_type = element()
@@ -84,7 +84,7 @@ class PocLinkRef(BaseModel, tag="pocLinkRef", nsmap=NSMAP):
 
 
 class POC(BaseModel, tag="poc", nsmap=NSMAP):
-    iso3166_1: Iso3166_1
+    iso3166_1: Iso31661
     street_address: List[MultiLineElement] = wrapped("streetAddress", element(tag="line"))
     city: str = element()
     iso3166_2: Optional[iso3166_2_type] = element(tag="iso3166-2")
@@ -123,7 +123,7 @@ class POC(BaseModel, tag="poc", nsmap=NSMAP):
 
 
 class Org(BaseModel, tag="org", nsmap=NSMAP):
-    iso3166_1: Iso3166_1
+    iso3166_1: Iso31661
     street_address: List[MultiLineElement] = wrapped("streetAddress", element(tag="line"))
     city: str = element()
     iso3166_2: Optional[iso3166_2_type] = element(tag="iso3166-2")
@@ -147,7 +147,7 @@ class Org(BaseModel, tag="org", nsmap=NSMAP):
 class Customer(BaseModel, tag="customer", nsmap=NSMAP):
     customer_name: str = element(tag="customerName")
 
-    iso3166_1: Iso3166_1
+    iso3166_1: Iso31661
     street_address: List[MultiLineElement] = wrapped("streetAddress", element(tag="line"))
     city: str = element()
     iso3166_2: Optional[iso3166_2_type] = element(tag="iso3166-2")

@@ -1,13 +1,13 @@
 import pytest
-import responses
 import requests
+import responses
 from pydantic.error_wrappers import ValidationError
 
+from regrws.api import constants
 from regrws.api.core import Response, Session
+from regrws.models import Error, Org
 
-
-from regrws.models import Org, Error
-from .payloads import ORG_PAYLOAD, ERROR_PAYLOAD
+from .payloads import ERROR_PAYLOAD, ORG_PAYLOAD
 
 
 def test_valid_parser_and_model(cov):
@@ -39,7 +39,7 @@ def test_requests_wrapper(mocked_responses):
         "https://reg.ote.arin.net/rest/org/ARIN?apikey=APIKEY",
         body=ORG_PAYLOAD.encode(),
         status=200,
-        content_type="application/xml",
+        content_type=constants.CONTENT_TYPE,
     )
     resp = requests.get("https://reg.ote.arin.net/rest/org/ARIN?apikey=APIKEY")
     assert resp.status_code == 200
@@ -60,7 +60,7 @@ def test_requests_wrapper_with_errors(mocked_responses):
         "https://reg.ote.arin.net/rest/org/ARIN?apikey=APIKEY",
         body=ERROR_PAYLOAD.encode(),
         status=400,
-        content_type="application/xml",
+        content_type=constants.CONTENT_TYPE,
     )
     resp = requests.get("https://reg.ote.arin.net/rest/org/ARIN?apikey=APIKEY")
     assert resp.status_code == 400
