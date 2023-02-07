@@ -1,5 +1,8 @@
 # pyregrws
 
+[![CI](https://github.com/jsenecal/pyregrws/actions/workflows/ci.yml/badge.svg?branch=main&event=push)](https://github.com/jsenecal/pyregrws/actions/workflows/ci.yml)  
+[![codecov](https://codecov.io/github/jsenecal/pyregrws/branch/main/graph/badge.svg?token=G5CK0SWY41)](https://codecov.io/github/jsenecal/pyregrws)
+
 ## Currently Supported Payloads
 
 - [POC](https://www.arin.net/resources/manage/regrws/payloads/#poc-payload)
