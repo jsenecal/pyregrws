@@ -4,9 +4,10 @@ from typing import TYPE_CHECKING, ClassVar
 
 from pydantic_xml.model import BaseXmlModel
 
-if TYPE_CHECKING:
-    from regrws.api.core import API, Manager
+from regrws.api.manager import BaseManager
 
+if TYPE_CHECKING:
+    from regrws.api.core import Api
 
 
 NSMAP = {"": "http://www.arin.net/regrws/core/v1"}
@@ -16,9 +17,10 @@ class BaseModel(BaseXmlModel):
 
     _endpoint: ClassVar[str]
     _handle: ClassVar[str] = "handle"
+    _manager_class: ClassVar[type[BaseManager]] = BaseManager
 
-    _api: API
-    _manager: Manager
+    _api: Api
+    _manager: type[BaseManager]
 
     class Config:
         anystr_strip_whitespace = True
@@ -31,8 +33,6 @@ class BaseModel(BaseXmlModel):
 
     def save(self):
         return self._manager.save(self)
-    
+
     def delete(self):
         return self._manager.delete(self)
-
-    

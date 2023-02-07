@@ -1,6 +1,6 @@
 import pytest
 
-from regrws.models import Customer, NetBlock, Org, Net, Error, POC
+from regrws.models import Customer, NetBlock, Org, Net, Error, Poc
 from regrws.arin_xml_encoder import ARINXmlEncoder
 from .payloads import CUSTOMER_PAYLOAD, NETBLOCK_PAYLOAD, ORG_PAYLOAD, NET_PAYLOAD, ERROR_PAYLOAD, POC_PAYLOAD
 
@@ -11,7 +11,7 @@ PARAMETERS = (
     (NetBlock, NETBLOCK_PAYLOAD),
     (Net, NET_PAYLOAD),
     (Error, ERROR_PAYLOAD),
-    (POC, POC_PAYLOAD),
+    (Poc, POC_PAYLOAD),
 )
 
 

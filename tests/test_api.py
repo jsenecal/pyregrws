@@ -2,8 +2,8 @@ import pytest
 import responses
 
 from regrws.api import constants
-from regrws.api.core import API
-from regrws.models import POC, Customer, Net, Org
+from regrws.api.core import Api
+from regrws.models import Poc, Customer, Net, Org
 from regrws.models.base import BaseModel
 
 from .payloads import (
@@ -19,7 +19,7 @@ PARAMETERS = (
     (Customer, CUSTOMER_PAYLOAD, "customer"),
     (Net, NET_PAYLOAD, "net"),
     (Org, ORG_PAYLOAD, "org"),
-    (POC, POC_PAYLOAD, "poc"),
+    (Poc, POC_PAYLOAD, "poc"),
 )
 
 
@@ -38,7 +38,7 @@ class TestAPI:
         return model.from_xml(payload)
 
     def test_manager_get(self, mocked_responses, instance: BaseModel, payload, manager, cov):
-        api = API(api_key="APIKEY", base_url=constants.BASE_URL_DEFAULT)
+        api = Api(api_key="APIKEY", base_url=constants.BASE_URL_DEFAULT)
         assert api
 
         instance._api = api
@@ -55,7 +55,7 @@ class TestAPI:
         assert inst
 
     def test_manager_put(self, mocked_responses, instance: BaseModel, payload, manager, cov):
-        api = API(api_key="APIKEY", base_url=constants.BASE_URL_DEFAULT)
+        api = Api(api_key="APIKEY", base_url=constants.BASE_URL_DEFAULT)
         assert api
 
         instance._api = api
@@ -72,7 +72,7 @@ class TestAPI:
         assert instance
 
     def test_manager_delete(self, mocked_responses, instance: BaseModel, payload, manager, cov):
-        api = API(api_key="APIKEY", base_url=constants.BASE_URL_DEFAULT)
+        api = Api(api_key="APIKEY", base_url=constants.BASE_URL_DEFAULT)
         assert api
 
         instance._api = api
@@ -89,7 +89,7 @@ class TestAPI:
         assert instance
 
     def test_manager_create(self, mocked_responses, instance: BaseModel, payload, manager, cov):
-        api = API(api_key="APIKEY", base_url=constants.BASE_URL_DEFAULT)
+        api = Api(api_key="APIKEY", base_url=constants.BASE_URL_DEFAULT)
         assert api
         instance._api = api
 
