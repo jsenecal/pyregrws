@@ -129,9 +129,10 @@ class Manager:
 
     # retrieve
     def get(self, handle: str):
-        handle = handle.upper()
-        url = self.endpoint_url + f"/{handle}"
-        return self._do("get", url)
+        if self.endpoint_url:
+            handle = handle.upper()
+            url = self.endpoint_url + f"/{handle}"
+            return self._do("get", url)
 
     # update
     def save(self, instance: type[BaseModel]):
