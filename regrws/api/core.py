@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING, Dict, Literal, Optional
 import requests
 
 from regrws.arin_xml_encoder import ARINXmlEncoder
-from regrws.models import Customer, Error, Org
+from regrws.models import Customer, Error, Org, Net, POC
 from regrws.settings import Settings
 
 from .constants import BASE_URL_DEFAULT
@@ -86,8 +86,11 @@ class API:
         self.base_url = f"{base_url if base_url[-1] != '/' else base_url[:-1]}/rest"
         self.apikey = settings.api_key
 
-        self.org = Manager(api=self, model=Org)
-        self.customer = Manager(api=self, model=Customer)
+        for model in [Customer, Net, Org, POC]:
+            if hasattr(model, "_endpoint"):
+                manager = Manager(api=self, model=model)
+                endpoint = model._endpoint[1:]  # Remove leading "/"
+                setattr(self, endpoint, manager)
 
 
 class Manager:
@@ -114,7 +117,15 @@ class Manager:
             return res.instance
 
     def create(self, *args, **kwargs):
-        raise NotImplementedError
+        instance = self.model(*args, **kwargs)
+        instance._manager = self
+        instance._api = self.api
+        url = instance.absolute_url
+        return self._do(
+            "post",
+            url,
+            instance.to_xml(encoder=ARINXmlEncoder(), encoding="UTF-8", skip_empty=True),
+        )
 
     # retrieve
     def get(self, handle: str):
@@ -125,7 +136,9 @@ class Manager:
     # update
     def save(self, instance: type[BaseModel]):
         url = instance.absolute_url
-        return self._do("put", url, instance.to_xml(encoder=ARINXmlEncoder(), encoding="UTF-8", skip_empty=True))
+        return self._do(
+            "put", url, instance.to_xml(encoder=ARINXmlEncoder(), encoding="UTF-8", skip_empty=True)
+        )
 
     # delete
     def delete(self, instance: type[BaseModel]):

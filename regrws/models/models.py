@@ -223,6 +223,8 @@ class Net(BaseModel, tag="net", nsmap=NSMAP):
 
     poc_links: List[PocLinkRef] = wrapped("pocLinks", element(tag="pocLinkRef"))
 
+    _endpoint: ClassVar[str]= "/net"
+
     @root_validator(pre=True)
     def check_related_handle(cls, values):
         results = values.get("org_handle"), values.get("customer_handle")

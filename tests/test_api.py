@@ -15,12 +15,10 @@ from .payloads import (
 )
 
 PARAMETERS = (
-    (Org, ORG_PAYLOAD, "org"),
     (Customer, CUSTOMER_PAYLOAD, "customer"),
-    # (NetBlock, NETBLOCK_PAYLOAD),
-    # (Net, NET_PAYLOAD),
-    # (Error, ERROR_PAYLOAD),
-    # (POC, POC_PAYLOAD),
+    (Net, NET_PAYLOAD, "net"),
+    (Org, ORG_PAYLOAD, "org"),
+    (POC, POC_PAYLOAD, "poc"),
 )
 
 
@@ -88,3 +86,21 @@ class TestAPI:
 
         instance.delete()
         assert instance
+
+
+    def test_manager_create(self, mocked_responses, instance: BaseModel, payload, manager, cov):
+        api = API(api_key="APIKEY", base_url="https://reg.ote.arin.net/")
+        assert api
+        instance._api = api
+        
+        manager = getattr(api, manager)
+
+        mocked_responses.post(
+            f"{instance.absolute_url}?apikey=APIKEY",
+            body=payload.encode(),
+            status=200,
+            content_type="application/xml",
+        )
+
+        new_insance=manager.create(**instance.dict())
+        assert new_insance
