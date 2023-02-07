@@ -105,7 +105,7 @@ class Manager:
         if self.api and self.model._endpoint:
             return f"{self.api.base_url}{self.model._endpoint}"
 
-    def _do(self, verb: Literal["get", "put", "delete"], url: str, data: bytes | None = None):
+    def _do(self, verb: Literal["get", "post", "put", "delete"], url: str, data: bytes | None = None):
         with self.session as s:
             session_method = getattr(s, verb)
             res: Response = session_method(url, params=self.url_params, data=data)  # type: ignore
