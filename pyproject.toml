@@ -15,11 +15,12 @@ pydantic = {extras = ["dotenv"], version = "^1.10.4"}
 # pydantic-xml  = {git = "git@github.com:jsenecal/pydantic-xml.git", branch = "devel", extras = ["lxml"]}
 pydantic-xml  = {extras = ["lxml"], version = "^0.5.0"}
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
+pytest-xdist = "^3.1.0"
+black = {version = "^23.1.0", allow-prereleases = true}
 ipython = "^8.8.0"
 pytest = "^7.2.0"
 xmldiff = "^2.4"
-black = "^22.12.0"
 lxml = "^4.9.2"
 pytest-cov = "^4.0.0"
 responses = "^0.22.0"
