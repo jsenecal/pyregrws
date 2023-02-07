@@ -77,3 +77,12 @@ def test_requests_wrapper_with_errors(mocked_responses):
         err: Error = res.instance
         assert Error
         assert isinstance(err, Error)
+
+    with Session({200: Org}) as session:
+        org_id = "ARIN"
+        res: Response = session.get(
+            f"https://reg.ote.arin.net/rest/org/{org_id}", params={"apikey": "APIKEY"}
+        )
+        assert res.status_code == 400
+        with pytest.raises(RuntimeError, match=f"Parser for status code {res.status_code} is missing in session."):
+            res.instance
