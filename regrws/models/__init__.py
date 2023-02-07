@@ -6,81 +6,14 @@ from typing import ClassVar, List, Literal, Optional
 from pydantic import HttpUrl, conint, constr, root_validator
 from pydantic_xml.model import attr, element, wrapped
 
-from regrws.models.types import ZeroPaddedIPvAnyAddress
-from regrws.models.base import BaseModel, NSMAP
+from regrws.models.base import NSMAP, BaseModel
+from regrws.models.types import ZeroPaddedIPvAnyAddress, cidr_length_type
 
-# types
-code2_type = constr(min_length=2, max_length=2, to_upper=True)
-code3_type = constr(min_length=3, max_length=3, to_upper=True)
-iso3166_2_type = constr(max_length=3, to_upper=True)
-cidr_length_type = conint(ge=0, le=128)
+from .customer import Customer
+from .nested import IPVersionEnum, Iso31661, MultiLineElement, Phone, PocLinkRef
+from .types import iso3166_2_type
 
 __all__ = ["Customer", "Org", "Poc", "NetBlock", "Net", "Error"]
-
-
-ALGORITHM_NAMES_MAP = {
-    5: "RSA/SHA-1",
-    7: "RSASHA1-NSEC3-SHA1",
-    8: "RSA/SHA-256",
-    10: "RSA/SHA-512",
-    13: "ECDSA Curve P-256 with SHA-256",
-    14: "ECDSA Curve P-384 with SHA-384",
-}
-
-
-class AlgorithmEnum(IntEnum):
-    SHA1 = 5
-    NSEC3SHA1 = 7
-    SHA256 = 8
-    SHA512 = 10
-    ECDSA256 = 13
-    ECDSA384 = 14
-
-
-class IPVersionEnum(IntEnum):
-    IPV4 = 4
-    IPV6 = 6
-
-
-class Iso31661(BaseModel, tag="iso3166-1", nsmap=NSMAP):
-    name: str = element()
-    code2: code2_type = element()
-    code3: code3_type = element()
-    e164: int = element()
-
-
-class MultiLineElement(BaseModel):
-    number: int = attr()
-    line: str
-
-
-class PhoneType(BaseModel, tag="type", nsmap=NSMAP):
-    description: str = element()
-    code: Literal["O", "M", "F"] = element()
-
-
-class Phone(BaseModel, tag="phone", nsmap=NSMAP):
-    type: PhoneType = element()
-    number: str = element()
-    extension: Optional[str] = element()
-
-
-class PocLinkRef(BaseModel, tag="pocLinkRef", nsmap=NSMAP):
-    description: Literal[
-        "Abuse",
-        "Admin",
-        "NOC",
-        "Routing",
-        "Tech",
-    ] = attr()
-    function: Literal[
-        "AB",
-        "AD",
-        "N",
-        "R",
-        "T",
-    ] = attr()
-    handle: str = attr()
 
 
 class Poc(BaseModel, tag="poc", nsmap=NSMAP):
@@ -144,26 +77,6 @@ class Org(BaseModel, tag="org", nsmap=NSMAP):
     _endpoint: ClassVar[str] = "/org"
 
 
-class Customer(BaseModel, tag="customer", nsmap=NSMAP):
-    customer_name: str = element(tag="customerName")
-
-    iso3166_1: Iso31661
-    street_address: List[MultiLineElement] = wrapped("streetAddress", element(tag="line"))
-    city: str = element()
-    iso3166_2: Optional[iso3166_2_type] = element(tag="iso3166-2")
-    postal_code: Optional[str] = element(tag="postalCode")
-
-    comment: Optional[List[MultiLineElement]] = wrapped("comment", element(tag="line"))
-
-    handle: Optional[str] = element()
-    parent_org_handle: Optional[str] = element(tag="parentOrgHandle")
-    registration_date: Optional[str] = element(tag="registrationDate")
-
-    private_customer: Optional[bool] = element(tag="privateCustomer")
-
-    _endpoint: ClassVar[str] = "/customer"
-
-
 class NetBlock(BaseModel, tag="netBlock", nsmap=NSMAP):
     type: Literal[
         "A",
@@ -223,7 +136,7 @@ class Net(BaseModel, tag="net", nsmap=NSMAP):
 
     poc_links: List[PocLinkRef] = wrapped("pocLinks", element(tag="pocLinkRef"))
 
-    _endpoint: ClassVar[str]= "/net"
+    _endpoint: ClassVar[str] = "/net"
 
     @root_validator(pre=True)
     def check_related_handle(cls, values):

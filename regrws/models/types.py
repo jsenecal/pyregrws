@@ -1,13 +1,19 @@
 from ipaddress import IPv4Address, IPv6Address
 from typing import Union
 
-from pydantic import IPvAnyAddress
+from pydantic import IPvAnyAddress, constr, conint
 from pydantic.errors import IPvAnyAddressError
 from pydantic_xml.model import BaseXmlModel
 
 from .base import BaseModel
 
-XmlModelType = type[BaseModel] | type[BaseXmlModel] | BaseModel | BaseXmlModel
+xmlmodel_type = type[BaseModel] | type[BaseXmlModel] | BaseModel | BaseXmlModel
+
+
+code2_type = constr(min_length=2, max_length=2, to_upper=True)
+code3_type = constr(min_length=3, max_length=3, to_upper=True)
+iso3166_2_type = constr(max_length=3, to_upper=True)
+cidr_length_type = conint(ge=0, le=128)
 
 
 class ZeroPaddedIPvAnyAddress(IPvAnyAddress):

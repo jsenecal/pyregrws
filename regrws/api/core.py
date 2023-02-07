@@ -9,7 +9,7 @@ from regrws.settings import Settings
 from . import constants
 
 if TYPE_CHECKING:
-    from regrws.models.types import XmlModelType
+    from regrws.models.types import xmlmodel_type
 
 
 class Response(requests.Response):
@@ -17,14 +17,14 @@ class Response(requests.Response):
 
     def __init__(self, session: Session):
         super(Response, self).__init__()
-        self._object: XmlModelType | None = None
+        self._object: xmlmodel_type | None = None
         self.session = session
 
     @property
-    def instance(self) -> XmlModelType | None:
+    def instance(self) -> xmlmodel_type | None:
         if not self._object:
             try:
-                model: XmlModelType = self.session.handlers[self.status_code]
+                model: xmlmodel_type = self.session.handlers[self.status_code]
             except KeyError:
                 raise RuntimeError(
                     f"Parser for status code {self.status_code} is missing in session."
@@ -50,7 +50,7 @@ class Session(requests.Session):
     amongst other things.
     """
 
-    def __init__(self, handlers: Dict[int, XmlModelType], headers: Optional[dict] = None):
+    def __init__(self, handlers: Dict[int, xmlmodel_type], headers: Optional[dict] = None):
         super().__init__()
         self.handlers = handlers
         self.hooks["response"].append(self.response_hook)
