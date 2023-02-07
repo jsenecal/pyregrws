@@ -3,6 +3,8 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Literal
 
 from regrws.arin_xml_encoder import ARINXmlEncoder
+from regrws.api.core import Response
+
 
 if TYPE_CHECKING:
     from regrws.models.base import BaseModel
@@ -31,20 +33,20 @@ class BaseManager:
         url: str,
         data: bytes | None = None,
     ):
-        with self.session as s:
-            session_method = getattr(s, verb)
-            res: Response = session_method(url, params=self.url_params, data=data)  # type: ignore
+        with self.session as session:
+            session_method = getattr(session, verb)
+            res: Response = session_method(
+                url, params=self.url_params, data=data
+            )  # type: ignore
             res.raise_for_unknown_status()
 
             if res.instance:
-                res.instance._api = self.api
-                res.instance._manager = self
+                res.instance.manager = self  # type: ignore
             return res.instance
 
     def create(self, *args, **kwargs):
         instance = self.model(*args, **kwargs)
-        instance._manager = self
-        instance._api = self.api
+        instance.manager = self
         url = instance.absolute_url
         if url:
             return self._do(
@@ -52,7 +54,7 @@ class BaseManager:
                 url,
                 instance.to_xml(
                     encoder=ARINXmlEncoder(), encoding="UTF-8", skip_empty=True
-                ),
+                ),  # type: ignore
             )
 
     # retrieve
@@ -71,7 +73,7 @@ class BaseManager:
                 url,
                 instance.to_xml(
                     encoder=ARINXmlEncoder(), encoding="UTF-8", skip_empty=True
-                ),
+                ),  # type: ignore
             )
 
     # delete

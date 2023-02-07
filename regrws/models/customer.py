@@ -1,21 +1,30 @@
 from __future__ import annotations
 
-from typing import ClassVar, List
+from typing import ClassVar, List, TYPE_CHECKING
 
 from pydantic_xml.model import element, wrapped
-
-from .base import NSMAP, BaseManager, BaseModel
-
 
 from regrws.models.nested import Iso31661, MultiLineElement
 from regrws.models.types import iso3166_2_type
 
+from .base import NSMAP, BaseManager, BaseModel
+
 
 class CustomerManager(BaseManager):
-    pass
+    """Custom Manager for Customer Payloads"""
+
+    def create(self, *args, **kwargs):
+        """
+        https://www.arin.net/resources/manage/regrws/methods/#create-recipient-customer
+        """
+        raise NotImplementedError  # pragma: no cover
 
 
 class Customer(BaseModel, tag="customer", nsmap=NSMAP):
+    """
+    https://www.arin.net/resources/manage/regrws/payloads/#customer-payload
+    """
+
     customer_name: str = element(tag="customerName")
 
     iso3166_1: Iso31661

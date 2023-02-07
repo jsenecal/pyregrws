@@ -1,10 +1,9 @@
 from __future__ import annotations
 
-from enum import IntEnum
 from typing import ClassVar, List, Literal, Optional
 
-from pydantic import HttpUrl, conint, constr, root_validator
-from pydantic_xml.model import attr, element, wrapped
+from pydantic import HttpUrl, root_validator
+from pydantic_xml.model import element, wrapped
 
 from regrws.models.base import NSMAP, BaseModel
 from regrws.models.types import ZeroPaddedIPvAnyAddress, cidr_length_type

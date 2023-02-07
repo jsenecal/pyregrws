@@ -22,6 +22,7 @@ class Response(requests.Response):
 
     @property
     def instance(self) -> xmlmodel_type | None:
+        """Get pydantic_xml instance from request content"""
         if not self._object:
             try:
                 model: xmlmodel_type = self.session.handlers[self.status_code]
@@ -66,7 +67,7 @@ class Session(requests.Session):
 
 
 class Api:
-    """The API object is the point of entry to regrws."""
+    """The Api object is the point of entry to regrws."""
 
     def __init__(
         self,
@@ -75,7 +76,7 @@ class Api:
         settings: Settings | None = None,
     ):
         # avoid circular imports
-        from regrws.models import Customer, Net, Org, Poc
+        from regrws.models import Customer, Net, Org, Poc # pylint: disable=import-outside-toplevel
 
         if settings is None:
             kwargs = dict(base_url=constants.BASE_URL_DEFAULT)

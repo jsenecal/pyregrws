@@ -1,6 +1,7 @@
 from __future__ import annotations
+import inspect
 
-from typing import TYPE_CHECKING, ClassVar
+from typing import TYPE_CHECKING, ClassVar, no_type_check
 
 from pydantic_xml.model import BaseXmlModel
 
@@ -20,14 +21,14 @@ class BaseModel(BaseXmlModel):
     _manager_class: ClassVar[type[BaseManager]] = BaseManager
 
     _api: Api
-    _manager: type[BaseManager]
+    _manager: BaseManager
 
     class Config:
         anystr_strip_whitespace = True
         underscore_attrs_are_private = True
 
     @property
-    def absolute_url(self):
+    def absolute_url(self) -> str | None:
         if self._api and self._endpoint:
             return f"{self._api.base_url}{self._endpoint}/{getattr(self, self._handle)}"
 
@@ -36,3 +37,33 @@ class BaseModel(BaseXmlModel):
 
     def delete(self):
         return self._manager.delete(self)
+
+    @property
+    def manager(self):
+        """Set/Get the API Manager to the model instance"""
+        return self._manager
+
+    @manager.setter
+    def manager(self, manager: BaseManager):
+        self._manager = manager
+        self._api = manager.api
+
+    @no_type_check
+    def __setattr__(self, name, value):
+        """
+        Allows proper use of properties with setters
+        See https://github.com/pydantic/pydantic/issues/1577
+        """
+        try:
+            super().__setattr__(name, value)
+        except ValueError as e:
+            setters = inspect.getmembers(
+                self.__class__,
+                predicate=lambda x: isinstance(x, property) and x.fset is not None
+            )
+            for setter_name, func in setters:
+                if setter_name == name:
+                    object.__setattr__(self, name, value)
+                    break
+            else:
+                raise e
