@@ -15,7 +15,6 @@ NSMAP = {"": "http://www.arin.net/regrws/core/v1"}
 
 
 class BaseModel(BaseXmlModel):
-
     _endpoint: ClassVar[str]
     _handle: ClassVar[str] = "handle"
     _manager_class: ClassVar[type[BaseManager]] = BaseManager
@@ -56,14 +55,14 @@ class BaseModel(BaseXmlModel):
         """
         try:
             super().__setattr__(name, value)
-        except ValueError as e:
+        except ValueError as exc:
             setters = inspect.getmembers(
                 self.__class__,
                 predicate=lambda x: isinstance(x, property) and x.fset is not None
             )
-            for setter_name, func in setters:
+            for setter_name, _ in setters:
                 if setter_name == name:
                     object.__setattr__(self, name, value)
                     break
             else:
-                raise e
+                raise exc  # pragma: no cover
