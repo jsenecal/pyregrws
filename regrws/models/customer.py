@@ -1,10 +1,14 @@
+"""Customer Model"""
+
 from __future__ import annotations
 
-from typing import ClassVar, List, TYPE_CHECKING
+from typing import ClassVar, List
 
 from pydantic_xml.model import element, wrapped
 
+from regrws.arin_xml_encoder import ARINXmlEncoder
 from regrws.models.nested import Iso31661, MultiLineElement
+from regrws.models.net import Net
 from regrws.models.types import iso3166_2_type
 
 from .base import NSMAP, BaseManager, BaseModel
@@ -14,10 +18,25 @@ class CustomerManager(BaseManager):
     """Custom Manager for Customer Payloads"""
 
     def create(self, *args, **kwargs):
+        raise NotImplementedError  # pragma: no cover
+
+    def create_from_net(self, net: Net, *args, **kwargs) -> Customer | None:
         """
         https://www.arin.net/resources/manage/regrws/methods/#create-recipient-customer
         """
-        raise NotImplementedError  # pragma: no cover
+        instance = self.model(*args, **kwargs)
+        instance.manager = self
+        url = net.absolute_url
+        if url:
+            url = url + "/customer"
+            return self._do(
+                "post",
+                url,
+                instance.to_xml(
+                    encoder=ARINXmlEncoder(), encoding="UTF-8", skip_empty=True
+                ),  # type: ignore
+            )
+        return None
 
 
 class Customer(BaseModel, tag="customer", nsmap=NSMAP):

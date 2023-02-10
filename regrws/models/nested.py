@@ -53,19 +53,5 @@ class Phone(BaseModel, tag="phone", nsmap=NSMAP):
     extension: str | None = element()
 
 
-class PocLinkRef(BaseModel, tag="pocLinkRef", nsmap=NSMAP):
-    description: Literal[
-        "Abuse",
-        "Admin",
-        "NOC",
-        "Routing",
-        "Tech",
-    ] = attr()
-    function: Literal[
-        "AB",
-        "AD",
-        "N",
-        "R",
-        "T",
-    ] = attr()
-    handle: str = attr()
+class OriginAS(BaseModel, tag="originAS", nsmap=NSMAP):
+    asn: str

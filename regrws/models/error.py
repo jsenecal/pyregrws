@@ -1,0 +1,36 @@
+"""Error Model"""
+from typing import List, Literal
+
+from pydantic_xml.model import element, wrapped
+
+from .base import NSMAP, BaseModel
+
+
+class ErrorComponent(BaseModel, tag="component", nsmap=NSMAP):
+    """
+    Component of the Error payload
+    https://www.arin.net/resources/manage/regrws/payloads/#error-payload
+    """
+
+    name: str = element()
+    message: str = element()
+
+
+class Error(BaseModel, tag="error", nsmap=NSMAP):
+    """https://www.arin.net/resources/manage/regrws/payloads/#error-payload"""
+
+    message: str = element()
+    code: Literal[
+        "E_SCHEMA_VALIDATION",
+        "E_ENTITY_VALIDATION",
+        "E_OBJECT_NOT_FOUND",
+        "E_AUTHENTICATION",
+        "E_NOT_REMOVEABLE",
+        "E_BAD_REQUEST",
+        "E_OUTAGE",
+        "E_UNSPECIFIED",
+    ] = element()
+    components: List[ErrorComponent] = wrapped("components", element(tag="component"))
+    additionnal_info: List[str] = wrapped(
+        "additionalInfo", element(tag="message", default_factory=list)
+    )

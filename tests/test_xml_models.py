@@ -1,9 +1,17 @@
 import pytest
 
-from regrws.models import Customer, NetBlock, Org, Net, Error, Poc
 from regrws.arin_xml_encoder import ARINXmlEncoder
-from .payloads import CUSTOMER_PAYLOAD, NETBLOCK_PAYLOAD, ORG_PAYLOAD, NET_PAYLOAD, ERROR_PAYLOAD, POC_PAYLOAD
+from regrws.models import Customer, Error, Org, Poc
+from regrws.models.net import Net, NetBlock
 
+from .payloads import (
+    CUSTOMER_PAYLOAD,
+    ERROR_PAYLOAD,
+    NET_PAYLOAD,
+    NETBLOCK_PAYLOAD,
+    ORG_PAYLOAD,
+    POC_PAYLOAD,
+)
 
 PARAMETERS = (
     (Org, ORG_PAYLOAD),
@@ -32,7 +40,10 @@ class TestModels:
 
     def test_to_xml(self, instance, cov):
         instance_xml = instance.to_xml(
-            encoder=ARINXmlEncoder(), pretty_print=True, encoding="UTF-8", skip_empty=True
+            encoder=ARINXmlEncoder(),
+            pretty_print=True,
+            encoding="UTF-8",
+            skip_empty=True,
         ).decode()
         print("\n" + instance_xml)
         assert instance_xml is not False
