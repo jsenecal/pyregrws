@@ -2,20 +2,19 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Literal
 
-from regrws.arin_xml_encoder import ARINXmlEncoder
 from regrws.api.core import Response
-
+from regrws.arin_xml_encoder import ARINXmlEncoder
 
 if TYPE_CHECKING:
-    from regrws.models.base import BaseModel
     from regrws.api.core import Api
+    from regrws.models.base import BaseModel
 
 
 class BaseManager:
     def __init__(self, api: Api, model: type[BaseModel]) -> None:
         # prevent circular import
-        from regrws.models import Error
         from regrws.api.core import Session
+        from regrws.models import Error
 
         self.model = model
         self.api = api
@@ -58,7 +57,7 @@ class BaseManager:
             )
 
     # retrieve
-    def get(self, handle: str):
+    def from_handle(self, handle: str):
         if self.endpoint_url:
             handle = handle.upper()
             url = self.endpoint_url + f"/{handle}"

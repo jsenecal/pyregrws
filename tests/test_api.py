@@ -33,7 +33,7 @@ class TestAPI:
     def instance(self, model, payload, cov):
         return model.from_xml(payload)
 
-    def test_manager_get(
+    def test_manager_from_handle(
         self, mocked_responses, instance: BaseModel, payload, manager, cov
     ):
         api = Api(api_key="APIKEY", base_url=constants.BASE_URL_DEFAULT)
@@ -48,7 +48,7 @@ class TestAPI:
             content_type=constants.CONTENT_TYPE,
         )
 
-        inst = instance.manager.get(instance.handle)
+        inst = instance.manager.from_handle(instance.handle)
         assert inst
 
     def test_manager_put(

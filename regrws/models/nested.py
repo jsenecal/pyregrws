@@ -42,6 +42,11 @@ class MultiLineElement(BaseModel):
     line: str
 
 
+class Attachment(BaseModel, tag="attachment", nsmap=NSMAP):
+    data: str = element()
+    filename: str = element()
+
+
 class PhoneType(BaseModel, tag="type", nsmap=NSMAP):
     description: str = element()
     code: Literal["O", "M", "F"] = element()

@@ -3,6 +3,7 @@ import pytest
 from regrws.arin_xml_encoder import ARINXmlEncoder
 from regrws.models import Customer, Error, Org, Poc
 from regrws.models.net import Net, NetBlock
+from regrws.models.tickets import TicketRequest
 
 from .payloads import (
     CUSTOMER_PAYLOAD,
@@ -11,6 +12,7 @@ from .payloads import (
     NETBLOCK_PAYLOAD,
     ORG_PAYLOAD,
     POC_PAYLOAD,
+    TICKETED_REQUEST_PAYLOAD
 )
 
 PARAMETERS = (
@@ -20,6 +22,7 @@ PARAMETERS = (
     (Net, NET_PAYLOAD),
     (Error, ERROR_PAYLOAD),
     (Poc, POC_PAYLOAD),
+    (TicketRequest, TICKETED_REQUEST_PAYLOAD),
 )
 
 

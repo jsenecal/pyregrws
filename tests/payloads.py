@@ -142,3 +142,59 @@ ERROR_PAYLOAD = \
             <message>MESSAGE</message>
         </additionalInfo>
     </error>"""
+
+TICKETED_REQUEST_PAYLOAD = \
+    """<ticketedRequest xmlns="http://www.arin.net/regrws/core/v1" xmlns:ns2="http://www.arin.net/regrws/messages/v1">>
+        <ticket>
+            <messages>
+                <message>
+                    <ns2:messageId>MESSAGEID</ns2:messageId>
+                    <ns2:createdDate>Tue Feb 28 17:41:17 EST 2012</ns2:createdDate>
+                    <subject>SUBJECT</subject>
+                        <text>
+                            <line number = "1">Line 1</line>
+                        </text>
+                    <category>NONE</category>
+                    <attachments>
+                        <attachment>
+                            <data>DATA</data>
+                            <filename>FILENAME</filename>
+                        </attachment>
+                    </attachments>
+                </message>
+            </messages>
+            <ticketNo>TICKETNO</ticketNo>
+            <createdDate>Tue Jan 25 16:17:18 EST 2011</createdDate>
+            <resolvedDate>Tue Jan 25 16:17:18 EST 2011</resolvedDate>
+            <closedDate>Tue Jan 25 16:17:18 EST 2011</closedDate>
+            <updatedDate>Tue Jan 25 16:17:18 EST 2011</updatedDate>
+            <webTicketType>POC_RECOVERY</webTicketType>
+            <webTicketStatus>PENDING_CONFIRMATION</webTicketStatus>
+            <webTicketResolution>ACCEPTED</webTicketResolution>
+        </ticket>
+        <net>
+            <version>4</version>
+            <comment>
+                <line number = "1">Line 1</line>
+            </comment>
+            <registrationDate>Tue Jan 25 16:17:18 EST 2011</registrationDate>
+            <handle>NET-10-0-0-0-1</handle>
+            <netBlocks>
+                <netBlock>
+                    <type>A</type>
+                    <description>DESCRIPTION</description>
+                    <startAddress>010.000.000.000</startAddress>
+                    <endAddress>010.000.000.255</endAddress>
+                    <cidrLength>24</cidrLength>
+                </netBlock>
+            </netBlocks>
+            <customerHandle>C12341234</customerHandle>
+            <parentNetHandle>PARENTNETHANDLE</parentNetHandle>
+            <netName>NETNAME</netName>
+            <originASes>
+                <originAS>AS102</originAS>
+            </originASes>
+            <pocLinks>
+            </pocLinks>
+        </net>
+    </ticketedRequest>"""

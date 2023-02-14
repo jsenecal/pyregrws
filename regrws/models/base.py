@@ -1,6 +1,6 @@
 from __future__ import annotations
-import inspect
 
+import inspect
 from typing import TYPE_CHECKING, ClassVar, no_type_check
 
 from pydantic_xml.model import BaseXmlModel
@@ -58,7 +58,7 @@ class BaseModel(BaseXmlModel):
         except ValueError as exc:
             setters = inspect.getmembers(
                 self.__class__,
-                predicate=lambda x: isinstance(x, property) and x.fset is not None
+                predicate=lambda x: isinstance(x, property) and x.fset is not None,
             )
             for setter_name, _ in setters:
                 if setter_name == name:

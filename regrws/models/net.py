@@ -77,6 +77,6 @@ class Net(BaseModel, tag="net", nsmap=NSMAP):
             )
         if all(results):
             raise ValueError(
-                "`org_handle` and `customer_handle` are mutually exclusive"
+                "`orgHandle` and `customerHandle` elements are mutually exclusive."
             )
         return values

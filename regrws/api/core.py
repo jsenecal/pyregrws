@@ -76,7 +76,12 @@ class Api:
         settings: Settings | None = None,
     ):
         # avoid circular imports
-        from regrws.models import Customer, Net, Org, Poc # pylint: disable=import-outside-toplevel
+        from regrws.models import (  # pylint: disable=import-outside-toplevel
+            Customer,
+            Net,
+            Org,
+            Poc,
+        )
 
         if settings is None:
             kwargs = dict(base_url=constants.BASE_URL_DEFAULT)

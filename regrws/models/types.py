@@ -1,9 +1,9 @@
 from ipaddress import IPv4Address, IPv6Address
 from typing import Union
 
-from pydantic.networks import IPvAnyAddress
-from pydantic import constr, conint
+from pydantic import conint, constr
 from pydantic.errors import IPvAnyAddressError
+from pydantic.networks import IPvAnyAddress
 from pydantic_xml.model import BaseXmlModel
 
 from .base import BaseModel
