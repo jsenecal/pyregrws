@@ -144,8 +144,9 @@ ERROR_PAYLOAD = \
     </error>"""
 
 TICKETED_REQUEST_PAYLOAD = \
-    """<ticketedRequest xmlns="http://www.arin.net/regrws/core/v1" xmlns:ns2="http://www.arin.net/regrws/messages/v1">>
-        <ticket>
+    """<ticketedRequest
+        xmlns="http://www.arin.net/regrws/core/v1">
+        <ticket xmlns:ns2="http://www.arin.net/regrws/messages/v1" xmlns:ns4="http://www.arin.net/regrws/shared-ticket/v1">
             <messages>
                 <message>
                     <ns2:messageId>MESSAGEID</ns2:messageId>

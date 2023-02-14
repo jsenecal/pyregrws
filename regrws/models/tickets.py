@@ -10,7 +10,12 @@ from .nested import Attachment, MultiLineElement
 from .net import Net
 
 TICKET_NSMAP = NSMAP
-TICKET_NSMAP.update({"msg": "http://www.arin.net/regrws/messages/v1"})
+TICKET_NSMAP.update(
+    {
+        "mv1": "http://www.arin.net/regrws/messages/v1",
+        "stv1": "http://www.arin.net/regrws/shared-ticket/v1",
+    }
+)
 
 
 class TicketMessage(
@@ -18,8 +23,8 @@ class TicketMessage(
     tag="message",
     nsmap=TICKET_NSMAP,
 ):
-    message_id: str = element(tag="messageId", ns="msg")
-    created_date: str = element(tag="createdDate", ns="msg")
+    message_id: str = element(tag="messageId", ns="mv1")
+    created_date: str = element(tag="createdDate", ns="mv1")
     subject: str = element()
     text: List[MultiLineElement] = wrapped("text", element(tag="line"))
     category: str = element()
@@ -27,8 +32,10 @@ class TicketMessage(
 
 
 class Ticket(BaseModel, tag="ticket", nsmap=NSMAP):
-    messages: List[TicketMessage] = wrapped("messages", element(tag="message"))
+    messages: List[TicketMessage] = wrapped("messages", element(tag="mv1"))
     ticket_no: str = element(tag="ticketNo")
+    shared: bool | None = element(ns="stv1")
+    org_handle: str | None = element(tag="orgHandle", ns="stv1")
     created_date: str = element(tag="createdDate")
     resolved_date: str = element(tag="resolvedDate")
     closed_date: str = element(tag="closedDate")
