@@ -1,6 +1,7 @@
 # pyregrws
 
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/jsenecal/pyregrws/ci.yml?label=CI&style=for-the-badge)![PyPI](https://img.shields.io/pypi/v/pyregrws?style=for-the-badge)![Codecov](https://img.shields.io/codecov/c/github/jsenecal/pyregrws?style=for-the-badge)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/jsenecal/pyregrws/ci.yml?label=CI&style=for-the-badge)](https://github.com/jsenecal/pyregrws/actions/workflows/ci.yml)[![PyPI](https://img.shields.io/pypi/v/pyregrws?style=for-the-badge)](https://pypi.org/project/pyregrws/)[![Codecov](https://img.shields.io/codecov/c/github/jsenecal/pyregrws?style=for-the-badge)](https://codecov.io/github/jsenecal/pyregrws)
+
 ## Currently Supported Payloads
 
 - [POC](https://www.arin.net/resources/manage/regrws/payloads/#poc-payload)
