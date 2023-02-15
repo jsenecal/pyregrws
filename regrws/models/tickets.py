@@ -1,13 +1,12 @@
 """Ticket and related models"""
 from __future__ import annotations
 
-from typing import List, Literal, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, List, Literal, Optional
 
 from pydantic_xml.model import element, wrapped
 
 from .base import NSMAP, BaseModel
 from .nested import Attachment, MultiLineElement
-
 from .net import Net
 
 TICKET_NSMAP = NSMAP

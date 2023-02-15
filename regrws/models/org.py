@@ -1,25 +1,22 @@
 from __future__ import annotations
 
-from typing import ClassVar, List, Literal, Optional
+from typing import ClassVar, List, Optional
 
 from pydantic import HttpUrl
 from pydantic_xml.model import element, wrapped
 
-from regrws.api.core import Response, Session
 from regrws.api.manager import BaseManager
-from regrws.arin_xml_encoder import ARINXmlEncoder
 from regrws.models.base import NSMAP, BaseModel
 from regrws.models.poc import PocLinkRef
 from regrws.models.tickets import Ticket
 
-from .error import Error
 from .nested import Iso31661, MultiLineElement
 from .types import iso3166_2_type
 
 
 class OrgManager(BaseManager):
-    def create(self, return_type: type[BaseModel] | None = None, *args, **kwargs):
-        return super().create(Ticket, *args, **kwargs)
+    def create(self, return_type=Ticket, *args, **kwargs):
+        return super().create(return_type, *args, **kwargs)
 
 
 class Org(BaseModel, tag="org", nsmap=NSMAP):

@@ -53,7 +53,7 @@ class Poc(BaseModel, tag="poc", nsmap=NSMAP):
     _endpoint: ClassVar[str] = "/poc"
 
     @root_validator(pre=True)
-    def check_contact_type_and_payload(cls, values):
+    def check_contact_type_and_payload(cls, values):  # pragma: no cover
         contact_type = values.get("contact_type")
 
         if contact_type == "ROLE":

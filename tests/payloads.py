@@ -75,6 +75,7 @@ CUSTOMER_PAYLOAD = \
             <code3>USA</code3>
             <e164>1</e164>
         </iso3166-1>
+        <handle>C1241523</handle>
         <streetAddress>
             <line number = "1">Line 1</line>
         </streetAddress>

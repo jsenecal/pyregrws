@@ -43,7 +43,7 @@ class TestAPI:
         self, mocked_responses, instance: BaseModel, api, payload, manager, skip, cov
     ):
         if "get" in skip:
-            pytest.skip(SKIP_MSG)
+            pytest.skip(SKIP_MSG) # pragma: no cover
 
         instance.manager = getattr(api, manager)
 
@@ -61,7 +61,7 @@ class TestAPI:
         self, mocked_responses, instance: BaseModel, api, payload, manager, skip, cov
     ):
         if "put" in skip:
-            pytest.skip(SKIP_MSG)
+            pytest.skip(SKIP_MSG) # pragma: no cover
 
         instance.manager = getattr(api, manager)
 

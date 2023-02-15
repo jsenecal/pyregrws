@@ -36,7 +36,7 @@ class CustomerManager(BaseManager):
                     encoder=ARINXmlEncoder(), encoding="UTF-8", skip_empty=True
                 ),  # type: ignore
             )
-        return None
+        return None # pragma: no cover
 
 
 class Customer(BaseModel, tag="customer", nsmap=NSMAP):
