@@ -10,8 +10,8 @@ from regrws.models.base import NSMAP, BaseModel
 from regrws.models.poc import PocLinkRef
 from regrws.models.tickets import Ticket
 
-from .nested import Iso31661, MultiLineElement
-from .types import iso3166_2_type
+from regrws.models.nested import Iso31661, MultiLineElement
+from regrws.models.types import iso3166_2_type
 
 
 class OrgManager(BaseManager):

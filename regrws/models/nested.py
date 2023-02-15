@@ -3,8 +3,8 @@ from typing import Literal
 
 from pydantic_xml.model import attr, element
 
-from .base import NSMAP, BaseModel
-from .types import code2_type, code3_type
+from regrws.models.base import NSMAP, BaseModel
+from regrws.models.types import code2_type, code3_type
 
 ALGORITHM_NAMES_MAP = {
     5: "RSA/SHA-1",

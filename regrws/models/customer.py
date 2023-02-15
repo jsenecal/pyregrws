@@ -11,7 +11,7 @@ from regrws.models.nested import Iso31661, MultiLineElement
 from regrws.models.net import Net
 from regrws.models.types import iso3166_2_type
 
-from .base import NSMAP, BaseManager, BaseModel
+from regrws.models.base import NSMAP, BaseManager, BaseModel
 
 
 class CustomerManager(BaseManager):
