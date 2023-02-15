@@ -67,7 +67,7 @@ class BaseManager:
             return self._do("get", url)
 
     # update
-    def save(self, instance: type[BaseModel]):
+    def save(self, instance: BaseModel):
         url = instance.absolute_url
         if url:
             return self._do(

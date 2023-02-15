@@ -43,11 +43,11 @@ class BaseModel(BaseXmlModel):
 
     @property
     def manager(self):
-        """Set/Get the API Manager to the model instance"""
         return self._manager
 
     @manager.setter
     def manager(self, manager: BaseManager):
+        """Set the API Manager to the model instance"""
         self._manager = manager
         self._api = manager.api
 

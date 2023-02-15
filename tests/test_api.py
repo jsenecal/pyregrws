@@ -15,7 +15,7 @@ from .payloads import (
 SKIP_MSG = "no way to properly test this method against this endpoint"
 
 PARAMETERS = (
-    (Net, NET_PAYLOAD, "net", ["delete"]),
+    (Net, NET_PAYLOAD, "net", ["create", "delete"]),
     (Org, ORG_PAYLOAD, "org", ["create"]),
     (Poc, POC_PAYLOAD, "poc", []),
 )
