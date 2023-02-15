@@ -3,7 +3,7 @@ from typing import List, Literal
 
 from pydantic_xml.model import element, wrapped
 
-from .base import NSMAP, BaseModel
+from regrws.models.base import NSMAP, BaseModel
 
 
 class ErrorComponent(BaseModel, tag="component", nsmap=NSMAP):

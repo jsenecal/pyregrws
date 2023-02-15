@@ -9,13 +9,13 @@ from pydantic_xml.model import element, wrapped
 from regrws.api.manager import BaseManager
 from regrws.arin_xml_encoder import ARINXmlEncoder
 
-from .base import NSMAP, BaseModel
-from .nested import IPVersionEnum, MultiLineElement, OriginAS
-from .poc import PocLinkRef
-from .types import ZeroPaddedIPvAnyAddress, cidr_length_type
+from regrws.models.base import NSMAP, BaseModel
+from regrws.models.nested import IPVersionEnum, MultiLineElement, OriginAS
+from regrws.models.poc import PocLinkRef
+from regrws.models.types import ZeroPaddedIPvAnyAddress, cidr_length_type
 
 if TYPE_CHECKING:
-    from .tickets import TicketRequest
+    from regrws.models.tickets import TicketRequest
 
 
 class NetManager(BaseManager):

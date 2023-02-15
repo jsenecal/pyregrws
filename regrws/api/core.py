@@ -6,7 +6,7 @@ import requests
 
 from regrws.settings import Settings
 
-from . import constants
+from regrws.api import constants
 
 if TYPE_CHECKING:
     from regrws.models.types import xmlmodel_type

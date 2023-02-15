@@ -6,7 +6,7 @@ from pydantic.errors import IPvAnyAddressError
 from pydantic.networks import IPvAnyAddress
 from pydantic_xml.model import BaseXmlModel
 
-from .base import BaseModel
+from regrws.models.base import BaseModel
 
 xmlmodel_type = type[BaseModel] | type[BaseXmlModel] | BaseModel | BaseXmlModel
 

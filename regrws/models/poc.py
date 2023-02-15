@@ -3,9 +3,9 @@ from typing import ClassVar, List, Literal, Optional
 from pydantic import root_validator
 from pydantic_xml.model import attr, element, wrapped
 
-from .base import NSMAP, BaseModel
-from .nested import Iso31661, MultiLineElement, Phone
-from .types import iso3166_2_type
+from regrws.models.base import NSMAP, BaseModel
+from regrws.models.nested import Iso31661, MultiLineElement, Phone
+from regrws.models.types import iso3166_2_type
 
 
 class PocLinkRef(BaseModel, tag="pocLinkRef", nsmap=NSMAP):

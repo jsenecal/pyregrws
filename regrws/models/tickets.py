@@ -5,9 +5,9 @@ from typing import TYPE_CHECKING, List, Literal, Optional
 
 from pydantic_xml.model import element, wrapped
 
-from .base import NSMAP, BaseModel
-from .nested import Attachment, MultiLineElement
-from .net import Net
+from regrws.models.base import NSMAP, BaseModel
+from regrws.models.nested import Attachment, MultiLineElement
+from regrws.models.net import Net
 
 TICKET_NSMAP = NSMAP
 TICKET_NSMAP.update(
