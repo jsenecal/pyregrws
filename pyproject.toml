@@ -4,19 +4,30 @@ version = "0.1.0"
 description = "Python library to retrieve and modify records within ARIN's database through their Reg-RWS service"
 authors = ["Jonathan Senecal <contact@jonathansenecal.com>"]
 license = "Apache 2.0"
-packages = [
-    { include = "regrws" },
+readme = "README.md"
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: Apache Software License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Topic :: Internet",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Framework :: Pydantic",
 ]
+packages = [{ include = "regrws" }]
+
 
 [tool.poetry.dependencies]
 python = "^3.10"
 requests = "^2.28.1"
-pydantic = {extras = ["dotenv"], version = "^1.10.4"}
-pydantic-xml  = {extras = ["lxml"], version = "^0.5.0"}
+pydantic = { extras = ["dotenv"], version = "^1.10.4" }
+pydantic-xml = { extras = ["lxml"], version = "^0.5.0" }
 
 [tool.poetry.group.dev.dependencies]
 pytest-xdist = "^3.1.0"
-black = {version = "^23.1.0", allow-prereleases = true}
+black = { version = "^23.1.0", allow-prereleases = true }
 ipython = "^8.8.0"
 pytest = "^7.2.0"
 xmldiff = "^2.4"
@@ -25,9 +36,7 @@ pytest-cov = "^4.0.0"
 responses = "^0.22.0"
 
 [tool.pytest.ini_options]
-filterwarnings = [
-    "ignore::DeprecationWarning:pydantic_xml.*:",
-]
+filterwarnings = ["ignore::DeprecationWarning:pydantic_xml.*:"]
 
 [tool.black]
 line-length = 88
@@ -43,9 +52,7 @@ max-line-length = 88
 reportGeneralTypeIssues = "information"
 
 [tool.mypy]
-plugins = [
-  "pydantic.mypy"
-]
+plugins = ["pydantic.mypy"]
 
 follow_imports = "silent"
 warn_redundant_casts = true
