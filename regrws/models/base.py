@@ -29,7 +29,11 @@ class BaseModel(BaseXmlModel):
     @property
     def absolute_url(self) -> str | None:
         if self._api and self._endpoint:
-            return f"{self._api.base_url}{self._endpoint}/{getattr(self, self._handle)}"
+            handle = getattr(self, self._handle)
+            if handle:
+                return f"{self._api.base_url}{self._endpoint}/{handle}"
+            return f"{self._api.base_url}{self._endpoint}/"
+        return None  # pragma: no cover
 
     def save(self):
         return self._manager.save(self)

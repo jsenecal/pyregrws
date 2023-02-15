@@ -20,7 +20,7 @@ class CustomerManager(BaseManager):
     def create(self, *args, **kwargs):
         raise NotImplementedError  # pragma: no cover
 
-    def create_from_net(self, net: Net, *args, **kwargs) -> Customer | None:
+    def create_for_net(self, net: Net, *args, **kwargs) -> Customer | None:
         """
         https://www.arin.net/resources/manage/regrws/methods/#create-recipient-customer
         """
@@ -63,4 +63,4 @@ class Customer(BaseModel, tag="customer", nsmap=NSMAP):
     private_customer: bool | None = element(tag="privateCustomer")
 
     _endpoint: ClassVar[str] = "/customer"
-    _manager_class = CustomerManager
+    _manager_class: ClassVar[type[BaseManager]] = CustomerManager

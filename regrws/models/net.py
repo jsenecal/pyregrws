@@ -4,10 +4,19 @@ from typing import ClassVar, List, Literal, Optional
 from pydantic import root_validator
 from pydantic_xml.model import element, wrapped
 
+from regrws.api.manager import BaseManager
+
 from .base import NSMAP, BaseModel
 from .nested import IPVersionEnum, MultiLineElement, OriginAS
 from .poc import PocLinkRef
 from .types import ZeroPaddedIPvAnyAddress, cidr_length_type
+
+
+class NetManager(BaseManager):
+    """Custom Manager for Net Payloads"""
+
+    def create(self, *args, **kwargs):
+        raise NotImplementedError  # pragma: no cover
 
 
 class NetBlock(BaseModel, tag="netBlock", nsmap=NSMAP):
@@ -66,6 +75,7 @@ class Net(BaseModel, tag="net", nsmap=NSMAP):
     poc_links: List[PocLinkRef] = wrapped("pocLinks", element(tag="pocLinkRef"))
 
     _endpoint: ClassVar[str] = "/net"
+    _manager: ClassVar[type[BaseManager]] = NetManager
 
     @root_validator(pre=True)
     def check_related_handle(cls, values):
