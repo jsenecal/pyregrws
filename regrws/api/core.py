@@ -59,7 +59,7 @@ class Session(requests.Session):
         self.hooks["response"].append(self.response_hook)
         self.headers.update({"accept": constants.CONTENT_TYPE})
         if headers:
-            self.headers.update(headers)
+            self.headers.update(headers)  # pragma: no cover
 
     def response_hook(self, response, **kwargs) -> Response:
         """Replace request's Response by a regrws Response instance."""

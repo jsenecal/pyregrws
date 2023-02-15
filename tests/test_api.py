@@ -12,15 +12,17 @@ from .payloads import (
     POC_PAYLOAD,
 )
 
+SKIP_MSG = "no way to properly test this method against this endpoint"
+
 PARAMETERS = (
-    (Net, NET_PAYLOAD, "net"),
-    (Org, ORG_PAYLOAD, "org"),
-    (Poc, POC_PAYLOAD, "poc"),
+    (Net, NET_PAYLOAD, "net", ["delete"]),
+    (Org, ORG_PAYLOAD, "org", ["create"]),
+    (Poc, POC_PAYLOAD, "poc", []),
 )
 
 
 @pytest.mark.parametrize(
-    ("model", "payload", "manager"),
+    ("model", "payload", "manager", "skip"),
     PARAMETERS,
 )
 class TestAPI:
@@ -33,11 +35,15 @@ class TestAPI:
     def instance(self, model, payload, cov):
         return model.from_xml(payload)
 
+    @pytest.fixture
+    def api(self):
+        return Api(api_key="APIKEY", base_url=constants.BASE_URL_DEFAULT)
+
     def test_manager_from_handle(
-        self, mocked_responses, instance: BaseModel, payload, manager, cov
+        self, mocked_responses, instance: BaseModel, api, payload, manager, skip, cov
     ):
-        api = Api(api_key="APIKEY", base_url=constants.BASE_URL_DEFAULT)
-        assert api
+        if "get" in skip:
+            pytest.skip(SKIP_MSG)
 
         instance.manager = getattr(api, manager)
 
@@ -52,10 +58,10 @@ class TestAPI:
         assert inst
 
     def test_manager_put(
-        self, mocked_responses, instance: BaseModel, payload, manager, cov
+        self, mocked_responses, instance: BaseModel, api, payload, manager, skip, cov
     ):
-        api = Api(api_key="APIKEY", base_url=constants.BASE_URL_DEFAULT)
-        assert api
+        if "put" in skip:
+            pytest.skip(SKIP_MSG)
 
         instance.manager = getattr(api, manager)
 
@@ -70,10 +76,10 @@ class TestAPI:
         assert instance
 
     def test_manager_delete(
-        self, mocked_responses, instance: BaseModel, payload, manager, cov
+        self, mocked_responses, instance: BaseModel, api, payload, manager, skip, cov
     ):
-        api = Api(api_key="APIKEY", base_url=constants.BASE_URL_DEFAULT)
-        assert api
+        if "delete" in skip:
+            pytest.skip(SKIP_MSG)
 
         instance.manager = getattr(api, manager)
 
@@ -88,14 +94,13 @@ class TestAPI:
         assert instance
 
     def test_manager_create(
-        self, mocked_responses, instance: BaseModel, payload, manager, cov
+        self, mocked_responses, instance: BaseModel, api, payload, manager, skip, cov
     ):
-        api = Api(api_key="APIKEY", base_url=constants.BASE_URL_DEFAULT)
-        assert api
+        if "create" in skip:
+            pytest.skip(SKIP_MSG)
 
         manager = getattr(api, manager)
         instance.manager = manager
-
         mocked_responses.post(
             f"{instance.absolute_url}?apikey=APIKEY",
             body=payload.encode(),
