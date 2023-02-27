@@ -3,6 +3,7 @@ name = "pyregrws"
 version = "0.1.2"
 description = "Python library to retrieve and modify records within ARIN's database through their Reg-RWS service"
 authors = ["Jonathan Senecal <contact@jonathansenecal.com>"]
+homepage = "https://github.com/jsenecal/pyregrws"
 license = "Apache 2.0"
 readme = "README.md"
 classifiers = [
