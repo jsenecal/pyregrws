@@ -33,7 +33,7 @@ class BaseManager:
         from regrws.api.core import Session
         from regrws.models import Error
 
-        with Session({200: return_type or self.model, 400: Error}) as session:
+        with Session({200: return_type or self.model, 400: Error, 404: Error}) as session:
             session_method = getattr(session, verb)
             res: Response = session_method(
                 url, params=self.url_params, data=data

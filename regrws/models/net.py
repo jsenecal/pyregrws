@@ -50,7 +50,7 @@ class NetManager(BaseManager):
             )
         return None  # pragma: no cover
 
-    def reassign(self, instance: type[Net]) -> TicketRequest | None:
+    def reassign(self, instance: type[Net], net: type[Net]) -> TicketRequest | None:
         """This call performs a reassignment from the NET instance using the recipient information from the object."""
         # Avoid circular import
         from regrws.models.tickets import TicketRequest
@@ -61,14 +61,14 @@ class NetManager(BaseManager):
             return self._do(
                 "put",
                 url,
-                data=instance.to_xml(
+                data=net.to_xml(
                     encoder=ARINXmlEncoder(), encoding="UTF-8", skip_empty=True
                 ),  # type: ignore
                 return_type=TicketRequest,
             )
         return None  # pragma: no cover
 
-    def reallocate(self, instance: type[Net]) -> TicketRequest | None:
+    def reallocate(self, instance: type[Net], net: type[Net]) -> TicketRequest | None:
         """This call performs a reallocation from the NET instance using the recipient information from the object."""
         # Avoid circular import
         from regrws.models.tickets import TicketRequest
@@ -79,7 +79,7 @@ class NetManager(BaseManager):
             return self._do(
                 "put",
                 url,
-                data=instance.to_xml(
+                data=net.to_xml(
                     encoder=ARINXmlEncoder(), encoding="UTF-8", skip_empty=True
                 ),  # type: ignore
                 return_type=TicketRequest,
@@ -188,14 +188,14 @@ class Net(BaseModel, tag="net", nsmap=NSMAP):
             return None  # pragma: no cover
         return self._manager.remove(self)
 
-    def reassign(self, instance: type[Net]) -> TicketRequest | None:
-        """Reassign the Net to a different Org or Customer"""
+    def reassign(self, net: type[Net]) -> TicketRequest | None:
+        """Reassign the child Net to a different Org or Customer"""
         if self._manager is None:
             return None  # pragma: no cover
-        return self._manager.reassign(instance)
+        return self._manager.reassign(self, net)
 
-    def reallocate(self, instance: type[Net]) -> TicketRequest | None:
-        """Reallocate the Net to a different Org or Customer"""
+    def reallocate(self, net: type[Net]) -> TicketRequest | None:
+        """Reallocate the child Net to a different Org or Customer"""
         if self._manager is None:
             return None  # pragma: no cover
-        return self._manager.reallocate(instance)
+        return self._manager.reallocate(self, net)
