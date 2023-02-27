@@ -9,5 +9,5 @@ class ARINXmlEncoder(XmlEncoder):
         if isinstance(obj, bool):
             return "true" if obj else "false"
         if isinstance(obj, Enum):
-            return obj.value
+            return str(obj.value)
         return super().encode(obj)
