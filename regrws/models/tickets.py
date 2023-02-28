@@ -92,5 +92,5 @@ class Ticket(BaseModel, tag="ticket", nsmap=NSMAP):
 
 
 class TicketRequest(BaseModel, tag="ticketedRequest", nsmap=NSMAP):
-    ticket: Ticket = element(tag="ticket")
+    ticket: Optional[Ticket] = element(tag="ticket")
     net: Optional[Net] = element(tag="net")
