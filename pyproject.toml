@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pyregrws"
-version = "0.1.3"
+version = "0.1.4"
 description = "Python library to retrieve and modify records within ARIN's database through their Reg-RWS service"
 authors = ["Jonathan Senecal <contact@jonathansenecal.com>"]
 homepage = "https://github.com/jsenecal/pyregrws"
