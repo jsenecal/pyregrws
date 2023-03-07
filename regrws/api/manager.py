@@ -33,7 +33,9 @@ class BaseManager:
         from regrws.api.core import Session
         from regrws.models import Error
 
-        with Session({200: return_type or self.model, 400: Error, 404: Error}) as session:
+        handlers = {200: return_type or self.model}
+        handlers.update({i: Error for i in [400, 401, 403, 404, 405, 406, 409]})
+        with Session(handlers) as session: # type: ignore
             session_method = getattr(session, verb)
             res: Response = session_method(
                 url, params=self.url_params, data=data
