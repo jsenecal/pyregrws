@@ -12,11 +12,15 @@ POC_PAYLOAD = \
         </emails>
         <streetAddress>
             <line number = "1">Line 1</line>
+            <line number = "2"></line>
+            <line number = "3">Line 3</line>
         </streetAddress>
         <city>Chantilly</city>
         <postalCode>20151</postalCode>
         <comment>
             <line number = "1">Line 1</line>
+            <line number = "2"></line>
+            <line number = "3">Line 3</line>
         </comment>
         <registrationDate>Mon Nov 07 14:04:28 EST 2011</registrationDate>
         <handle>ARIN-HOSTMASTER</handle>
@@ -47,12 +51,16 @@ ORG_PAYLOAD = \
         </iso3166-1>
         <streetAddress>
             <line number = "1">Line 1</line>
+            <line number = "2"></line>
+            <line number = "3">Line 3</line>
         </streetAddress>
         <city>Chantilly</city>
         <iso3166-2>VA</iso3166-2>
         <postalCode>20151</postalCode>
         <comment>
             <line number = "1">Line 1</line>
+            <line number = "2"></line>
+            <line number = "3">Line 3</line>
         </comment>
         <handle>ARIN</handle>
         <registrationDate>Mon Nov 07 14:04:28 EST 2011</registrationDate>
@@ -78,12 +86,16 @@ CUSTOMER_PAYLOAD = \
         <handle>C1241523</handle>
         <streetAddress>
             <line number = "1">Line 1</line>
+            <line number = "2"></line>
+            <line number = "3">Line 3</line>
         </streetAddress>
         <city>Chantilly</city>
             <iso3166-2>VA</iso3166-2>
         <postalCode>20151</postalCode>
         <comment>
             <line number = "1">Line 1</line>
+            <line number = "2"></line>
+            <line number = "3">Line 3</line>
         </comment>
         <handle>CUST</handle>
         <parentOrgHandle>PARENTORGHANDLE</parentOrgHandle>
@@ -105,6 +117,8 @@ NET_PAYLOAD = \
         <version>4</version>
         <comment>
             <line number = "1">Line 1</line>
+            <line number = "2"></line>
+            <line number = "3">Line 3</line>
         </comment>
         <registrationDate>Tue Jan 25 16:17:18 EST 2011</registrationDate>
         <handle>NET-10-0-0-0-1</handle>
@@ -155,6 +169,8 @@ TICKET_PAYLOAD = \
                 <subject>SUBJECT</subject>
                     <text>
                         <line number = "1">Line 1</line>
+                        <line number = "2"></line>
+                        <line number = "3">Line 3</line>
                     </text>
                 <category>NONE</category>
                 <attachments>

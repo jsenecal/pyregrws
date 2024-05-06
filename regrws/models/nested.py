@@ -39,7 +39,7 @@ class Iso31661(BaseModel, tag="iso3166-1", nsmap=NSMAP):
 
 class MultiLineElement(BaseModel):
     number: int = attr()
-    line: str
+    line: str | None = ''
 
 
 class Attachment(BaseModel, tag="attachment", nsmap=NSMAP):
