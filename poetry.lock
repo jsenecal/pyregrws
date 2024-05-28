@@ -1005,4 +1005,4 @@ devenv = ["black", "coverage", "flake8", "zest.releaser[recommended]"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "fe715046829a2b04cf8370c453f172057217c243a1e3018fc6ad27a011752cb7"
+content-hash = "e746eac995bed4f8267fb4e04c8e2c505a44d4e63cb09d71b4ef33f35f8c545f"
