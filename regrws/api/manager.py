@@ -3,10 +3,9 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Literal
 
 from regrws.api.core import Response
-from regrws.arin_xml_encoder import ARINXmlEncoder
 
 if TYPE_CHECKING:
-    from regrws.api.core import Api, Session
+    from regrws.api.core import Api
     from regrws.models.base import BaseModel
 
 
@@ -55,8 +54,7 @@ class BaseManager:
             return self._do(
                 "post",
                 url,
-                instance.to_xml(
-                    encoder=ARINXmlEncoder(), encoding="UTF-8", skip_empty=True
+                instance.to_xml(encoding="UTF-8", skip_empty=True
                 ),  # type: ignore
                 return_type,
             )
@@ -75,8 +73,7 @@ class BaseManager:
             return self._do(
                 "put",
                 url,
-                instance.to_xml(
-                    encoder=ARINXmlEncoder(), encoding="UTF-8", skip_empty=True
+                instance.to_xml(encoding="UTF-8", skip_empty=True
                 ),  # type: ignore
             )
 

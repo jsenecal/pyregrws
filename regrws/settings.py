@@ -1,9 +1,8 @@
-from pydantic import BaseSettings, HttpUrl, SecretStr
+from pydantic import HttpUrl, SecretStr
+from pydantic_settings import SettingsConfigDict, BaseSettings
 
 
 class Settings(BaseSettings):
     base_url: HttpUrl
     api_key: SecretStr
-
-    class Config:
-        env_prefix = "regrws_"
+    model_config = SettingsConfigDict(env_prefix="regrws_")

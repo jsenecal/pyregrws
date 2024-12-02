@@ -1,6 +1,6 @@
 import pytest
 
-from regrws.arin_xml_encoder import ARINXmlEncoder
+
 from regrws.models import Customer, Error, Org, Poc
 from regrws.models.net import Net, NetBlock
 from regrws.models.tickets import TicketRequest
@@ -43,7 +43,6 @@ class TestModels:
 
     def test_to_xml(self, instance, cov):
         instance_xml = instance.to_xml(
-            encoder=ARINXmlEncoder(),
             pretty_print=True,
             encoding="UTF-8",
             skip_empty=True,

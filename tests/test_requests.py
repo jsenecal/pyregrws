@@ -1,7 +1,7 @@
 import pytest
 import requests
 import responses
-from pydantic.error_wrappers import ValidationError
+from pydantic import ValidationError
 
 from regrws.api import constants
 from regrws.api.core import Response, Session

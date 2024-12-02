@@ -3,11 +3,11 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, ClassVar, List, Literal, Optional
 
-from pydantic import root_validator
+from pydantic import model_validator
 from pydantic_xml.model import element, wrapped
 
 from regrws.api.manager import BaseManager
-from regrws.arin_xml_encoder import ARINXmlEncoder
+
 
 from regrws.models.base import NSMAP, BaseModel
 from regrws.models.nested import IPVersionEnum, MultiLineElement, OriginAS
@@ -44,7 +44,7 @@ class NetManager(BaseManager):
                 "put",
                 url,
                 data=instance.to_xml(
-                    encoder=ARINXmlEncoder(), encoding="UTF-8", skip_empty=True
+                     encoding="UTF-8", skip_empty=True
                 ),  # type: ignore
                 return_type=TicketRequest,
             )
@@ -62,7 +62,7 @@ class NetManager(BaseManager):
                 "put",
                 url,
                 data=net.to_xml(
-                    encoder=ARINXmlEncoder(), encoding="UTF-8", skip_empty=True
+                     encoding="UTF-8", skip_empty=True
                 ),  # type: ignore
                 return_type=TicketRequest,
             )
@@ -80,7 +80,7 @@ class NetManager(BaseManager):
                 "put",
                 url,
                 data=net.to_xml(
-                    encoder=ARINXmlEncoder(), encoding="UTF-8", skip_empty=True
+                     encoding="UTF-8", skip_empty=True
                 ),  # type: ignore
                 return_type=TicketRequest,
             )
@@ -136,7 +136,8 @@ class NetBlock(BaseModel, tag="netBlock", nsmap=NSMAP):
     end_address: Optional[ZeroPaddedIPvAnyAddress] = element(tag="endAddress")
     cidr_length: Optional[cidr_length_type] = element(tag="cidrLength")
 
-    @root_validator(pre=True)
+    @model_validator(mode="before")
+    @classmethod
     def check_payload(cls, values):  # pragma: no cover
         results = values.get("end_address") is None, values.get("cidr_length") is None
         if all(results):
@@ -168,7 +169,8 @@ class Net(BaseModel, tag="net", nsmap=NSMAP):
     _endpoint: ClassVar[str] = "/net"
     _manager_class: ClassVar[type[BaseManager]] = NetManager
 
-    @root_validator(pre=True)
+    @model_validator(mode="before")
+    @classmethod
     def check_related_handle(cls, values):  # pragma: no cover
         results = values.get("org_handle"), values.get("customer_handle")
         results_are_none = map(lambda x: x is None, results)

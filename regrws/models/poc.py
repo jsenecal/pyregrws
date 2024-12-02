@@ -1,6 +1,6 @@
 from typing import ClassVar, List, Literal, Optional
 
-from pydantic import root_validator
+from pydantic import model_validator
 from pydantic_xml.model import attr, element, wrapped
 
 from regrws.models.base import NSMAP, BaseModel
@@ -52,7 +52,8 @@ class Poc(BaseModel, tag="poc", nsmap=NSMAP):
 
     _endpoint: ClassVar[str] = "/poc"
 
-    @root_validator(pre=True)
+    @model_validator(mode="before")
+    @classmethod
     def check_contact_type_and_payload(cls, values):  # pragma: no cover
         contact_type = values.get("contact_type")
 

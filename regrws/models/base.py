@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING, ClassVar, no_type_check
 from pydantic_xml.model import BaseXmlModel
 
 from regrws.api.manager import BaseManager
+from pydantic import ConfigDict
 
 if TYPE_CHECKING:
     from regrws.api.core import Api
@@ -21,10 +22,9 @@ class BaseModel(BaseXmlModel):
 
     _api: Api
     _manager: BaseManager
-
-    class Config:
-        anystr_strip_whitespace = True
-        underscore_attrs_are_private = True
+    # TODO[pydantic]: The following keys were removed: `underscore_attrs_are_private`.
+    # Check https://docs.pydantic.dev/dev-v2/migration/#changes-to-config for more information.
+    model_config = ConfigDict(str_strip_whitespace=True, underscore_attrs_are_private=True)
 
     @property
     def absolute_url(self) -> str | None:

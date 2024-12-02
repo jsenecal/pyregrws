@@ -23,9 +23,10 @@ packages = [{ include = "regrws" }]
 [tool.poetry.dependencies]
 python = "^3.10"
 requests = "^2.28.1"
-pydantic = { extras = ["dotenv"], version = "^1.10.4" }
-pydantic-xml = { extras = ["lxml"], version = "^0.5.0" }
+pydantic = "^2.10.2"
+pydantic-xml = "2.14.1"
 certifi = ">=2024.7.4"
+pydantic-settings = "^2.6.1"
 
 [tool.poetry.group.dev.dependencies]
 pytest-xdist = "^3.1.0"
