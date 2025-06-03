@@ -74,8 +74,7 @@ ORG_PAYLOAD = \
         </pocLinks>
     </org>"""
 
-CUSTOMER_PAYLOAD = \
-    """<customer xmlns="http://www.arin.net/regrws/core/v1" >
+CUSTOMER_PAYLOAD = """<customer xmlns="http://www.arin.net/regrws/core/v1" >
         <customerName>CUSTOMERNAME</customerName>
         <iso3166-1>
             <name>UNITED STATES</name>
@@ -90,7 +89,7 @@ CUSTOMER_PAYLOAD = \
             <line number = "3">Line 3</line>
         </streetAddress>
         <city>Chantilly</city>
-            <iso3166-2>VA</iso3166-2>
+        <iso3166-2>VA</iso3166-2>
         <postalCode>20151</postalCode>
         <comment>
             <line number = "1">Line 1</line>

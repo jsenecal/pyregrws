@@ -3,7 +3,6 @@ import responses
 
 from regrws.api import Api, constants
 from regrws.models.customer import Customer
-from regrws.models.net import Net
 
 from .payloads import (
     CUSTOMER_PAYLOAD,
