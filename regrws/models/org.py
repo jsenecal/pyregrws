@@ -19,7 +19,7 @@ class OrgManager(BaseManager):
         return super().create(return_type, *args, **kwargs)
 
 
-class Org(BaseModel, tag="org", nsmap=NSMAP):
+class Org(BaseModel, tag="org", nsmap=NSMAP, search_mode="unordered"):
     iso3166_1: Iso31661
     street_address: List[MultiLineElement] = wrapped(
         "streetAddress", element(tag="line")

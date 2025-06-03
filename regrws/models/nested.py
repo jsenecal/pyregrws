@@ -30,7 +30,7 @@ class IPVersionEnum(IntEnum):
     IPV6 = 6
 
 
-class Iso31661(BaseModel, tag="iso3166-1", nsmap=NSMAP):
+class Iso31661(BaseModel, tag="iso3166-1", nsmap=NSMAP, search_mode="unordered"):
     name: str = element()
     code2: code2_type = element()
     code3: code3_type = element()
@@ -42,21 +42,21 @@ class MultiLineElement(BaseModel):
     line: str | None = ''
 
 
-class Attachment(BaseModel, tag="attachment", nsmap=NSMAP):
+class Attachment(BaseModel, tag="attachment", nsmap=NSMAP, search_mode="unordered"):
     data: str = element()
     filename: str = element()
 
 
-class PhoneType(BaseModel, tag="type", nsmap=NSMAP):
+class PhoneType(BaseModel, tag="type", nsmap=NSMAP, search_mode="unordered"):
     description: str = element()
     code: Literal["O", "M", "F"] = element()
 
 
-class Phone(BaseModel, tag="phone", nsmap=NSMAP):
+class Phone(BaseModel, tag="phone", nsmap=NSMAP, search_mode="unordered"):
     type: PhoneType = element()
     number: str = element()
     extension: str | None = element()
 
 
-class OriginAS(BaseModel, tag="originAS", nsmap=NSMAP):
+class OriginAS(BaseModel, tag="originAS", nsmap=NSMAP, search_mode="unordered"):
     asn: str

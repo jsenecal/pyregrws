@@ -7,7 +7,6 @@ from pydantic import root_validator
 from pydantic_xml.model import element, wrapped
 
 from regrws.api.manager import BaseManager
-from regrws.arin_xml_encoder import ARINXmlEncoder
 
 from regrws.models.base import NSMAP, BaseModel
 from regrws.models.nested import IPVersionEnum, MultiLineElement, OriginAS
@@ -43,9 +42,7 @@ class NetManager(BaseManager):
             return self._do(
                 "put",
                 url,
-                data=instance.to_xml(
-                    encoder=ARINXmlEncoder(), encoding="UTF-8", skip_empty=True
-                ),  # type: ignore
+                data=instance.to_xml(encoding="UTF-8", skip_empty=True),  # type: ignore
                 return_type=TicketRequest,
             )
         return None  # pragma: no cover
@@ -61,9 +58,7 @@ class NetManager(BaseManager):
             return self._do(
                 "put",
                 url,
-                data=net.to_xml(
-                    encoder=ARINXmlEncoder(), encoding="UTF-8", skip_empty=True
-                ),  # type: ignore
+                data=net.to_xml(encoding="UTF-8", skip_empty=True),  # type: ignore
                 return_type=TicketRequest,
             )
         return None  # pragma: no cover
@@ -79,9 +74,7 @@ class NetManager(BaseManager):
             return self._do(
                 "put",
                 url,
-                data=net.to_xml(
-                    encoder=ARINXmlEncoder(), encoding="UTF-8", skip_empty=True
-                ),  # type: ignore
+                data=net.to_xml(encoding="UTF-8", skip_empty=True),  # type: ignore
                 return_type=TicketRequest,
             )
         return None  # pragma: no cover
@@ -110,7 +103,7 @@ class NetManager(BaseManager):
         return None  # pragma: no cover
 
 
-class NetBlock(BaseModel, tag="netBlock", nsmap=NSMAP):
+class NetBlock(BaseModel, tag="netBlock", nsmap=NSMAP, search_mode="unordered"):
     type: Literal[
         "A",
         "AF",
@@ -144,7 +137,7 @@ class NetBlock(BaseModel, tag="netBlock", nsmap=NSMAP):
         return values
 
 
-class Net(BaseModel, tag="net", nsmap=NSMAP):
+class Net(BaseModel, tag="net", nsmap=NSMAP, search_mode="unordered"):
     version: IPVersionEnum = element()
     comment: Optional[List[MultiLineElement]] = wrapped("comment", element(tag="line"))
 

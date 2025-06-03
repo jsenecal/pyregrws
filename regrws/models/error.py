@@ -6,7 +6,7 @@ from pydantic_xml.model import element, wrapped
 from regrws.models.base import NSMAP, BaseModel
 
 
-class ErrorComponent(BaseModel, tag="component", nsmap=NSMAP):
+class ErrorComponent(BaseModel, tag="component", nsmap=NSMAP, search_mode="unordered"):
     """
     Component of the Error payload
     https://www.arin.net/resources/manage/regrws/payloads/#error-payload
@@ -16,7 +16,7 @@ class ErrorComponent(BaseModel, tag="component", nsmap=NSMAP):
     message: str = element()
 
 
-class Error(BaseModel, tag="error", nsmap=NSMAP):
+class Error(BaseModel, tag="error", nsmap=NSMAP, search_mode="unordered"):
     """https://www.arin.net/resources/manage/regrws/payloads/#error-payload"""
 
     message: str = element()

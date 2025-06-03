@@ -8,7 +8,7 @@ from regrws.models.nested import Iso31661, MultiLineElement, Phone
 from regrws.models.types import iso3166_2_type
 
 
-class PocLinkRef(BaseModel, tag="pocLinkRef", nsmap=NSMAP):
+class PocLinkRef(BaseModel, tag="pocLinkRef", nsmap=NSMAP, search_mode="unordered"):
     description: Literal[
         "Abuse",
         "Admin",
@@ -26,7 +26,7 @@ class PocLinkRef(BaseModel, tag="pocLinkRef", nsmap=NSMAP):
     handle: str = attr()
 
 
-class Poc(BaseModel, tag="poc", nsmap=NSMAP):
+class Poc(BaseModel, tag="poc", nsmap=NSMAP, search_mode="unordered"):
     iso3166_1: Iso31661
     street_address: List[MultiLineElement] = wrapped(
         "streetAddress", element(tag="line")

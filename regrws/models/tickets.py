@@ -1,7 +1,7 @@
 """Ticket and related models"""
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, List, Literal, Optional
+from typing import List, Literal, Optional
 
 from pydantic_xml.model import element, wrapped
 
@@ -22,6 +22,7 @@ class TicketMessage(
     BaseModel,
     tag="message",
     nsmap=TICKET_NSMAP,
+    search_mode="unordered"
 ):
     message_id: str = element(tag="messageId", ns="mv1")
     created_date: str = element(tag="createdDate", ns="mv1")
@@ -31,8 +32,8 @@ class TicketMessage(
     attachments: List[Attachment] = wrapped("attachments", element(tag="attachment"))
 
 
-class Ticket(BaseModel, tag="ticket", nsmap=NSMAP):
-    messages: List[TicketMessage] = wrapped("messages", element(tag="mv1"))
+class Ticket(BaseModel, tag="ticket", nsmap=NSMAP, search_mode="unordered"):
+    messages: List[TicketMessage] = wrapped("messages", element(tag="message"))
     ticket_no: str = element(tag="ticketNo")
     shared: bool | None = element(ns="stv1")
     org_handle: str | None = element(tag="orgHandle", ns="stv1")
@@ -91,6 +92,8 @@ class Ticket(BaseModel, tag="ticket", nsmap=NSMAP):
     ] = element(tag="webTicketResolution")
 
 
-class TicketRequest(BaseModel, tag="ticketedRequest", nsmap=NSMAP):
+class TicketRequest(
+    BaseModel, tag="ticketedRequest", nsmap=NSMAP, search_mode="unordered"
+):
     ticket: Optional[Ticket] = element(tag="ticket")
     net: Optional[Net] = element(tag="net")

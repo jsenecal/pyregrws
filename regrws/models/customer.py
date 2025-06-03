@@ -6,7 +6,7 @@ from typing import ClassVar, List
 
 from pydantic_xml.model import element, wrapped
 
-from regrws.arin_xml_encoder import ARINXmlEncoder
+
 from regrws.models.nested import Iso31661, MultiLineElement
 from regrws.models.net import Net
 from regrws.models.types import iso3166_2_type
@@ -32,14 +32,12 @@ class CustomerManager(BaseManager):
             return self._do(
                 "post",
                 url,
-                instance.to_xml(
-                    encoder=ARINXmlEncoder(), encoding="UTF-8", skip_empty=True
-                ),  # type: ignore
+                instance.to_xml(encoding="UTF-8", skip_empty=True),  # type: ignore
             )
         return None # pragma: no cover
 
 
-class Customer(BaseModel, tag="customer", nsmap=NSMAP):
+class Customer(BaseModel, tag="customer", nsmap=NSMAP, search_mode="unordered"):
     """
     https://www.arin.net/resources/manage/regrws/payloads/#customer-payload
     """
