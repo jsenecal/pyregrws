@@ -977,4 +977,4 @@ devenv = ["black", "coverage", "flake8", "zest.releaser[recommended]"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "14b8c8af5a6b88f1fd5d6e08745a6a562785daf8a2df134047b62c46cbfa9918"
+content-hash = "8ac6579e56e48dc17551d9dd29064685334f3ae20a90ee211fa9854eea77b186"
