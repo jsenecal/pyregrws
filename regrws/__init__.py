@@ -1,6 +1,3 @@
-from pkg_resources import DistributionNotFound, get_distribution
+import importlib.metadata
 
-try:
-    __version__ = get_distribution("pyregrws").version
-except DistributionNotFound:  # pragma: no cover
-    pass
+__version__ = importlib.metadata.version("pyregrws")
