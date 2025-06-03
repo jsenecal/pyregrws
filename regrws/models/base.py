@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import inspect
+from enum import Enum
 from typing import TYPE_CHECKING, ClassVar, no_type_check
 
 from pydantic_xml.model import BaseXmlModel
@@ -25,6 +26,11 @@ class BaseModel(BaseXmlModel):
     class Config:
         anystr_strip_whitespace = True
         underscore_attrs_are_private = True
+
+        xml_encoders = {
+            type(bool): lambda v: "true" if v else "false",
+            type(Enum): lambda v: str(v.value),
+        }
 
     @property
     def absolute_url(self) -> str | None:

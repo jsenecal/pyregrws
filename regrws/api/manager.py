@@ -3,16 +3,15 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Literal
 
 from regrws.api.core import Response
-from regrws.arin_xml_encoder import ARINXmlEncoder
+
 
 if TYPE_CHECKING:
-    from regrws.api.core import Api, Session
+    from regrws.api.core import Api
     from regrws.models.base import BaseModel
 
 
 class BaseManager:
     def __init__(self, api: Api, model: type[BaseModel]) -> None:
-
         self.model = model
         self.api = api
         self.url_params = {"apikey": self.api.apikey.get_secret_value()}
@@ -35,16 +34,16 @@ class BaseManager:
 
         handlers = {200: return_type or self.model}
         handlers.update({i: Error for i in [400, 401, 403, 404, 405, 406, 409]})
-        with Session(handlers) as session: # type: ignore
+        with Session(handlers) as session:  # type: ignore
             session_method = getattr(session, verb)
-            res: Response = session_method(
-                url, params=self.url_params, data=data
-            )  # type: ignore
+            res: Response = session_method(url, params=self.url_params, data=data)  # type: ignore
             res.raise_for_unknown_status()
 
             if res.instance:
                 related_model = res.instance.__class__
-                res.instance.manager = related_model._manager_class(api=self.api, model=related_model)  # type: ignore
+                res.instance.manager = related_model._manager_class(
+                    api=self.api, model=related_model
+                )  # type: ignore
             return res.instance
 
     def create(self, return_type: type[BaseModel] | None = None, *args, **kwargs):
@@ -55,9 +54,7 @@ class BaseManager:
             return self._do(
                 "post",
                 url,
-                instance.to_xml(
-                    encoder=ARINXmlEncoder(), encoding="UTF-8", skip_empty=True
-                ),  # type: ignore
+                instance.to_xml(encoding="UTF-8", skip_empty=True),  # type: ignore
                 return_type,
             )
 
@@ -75,9 +72,7 @@ class BaseManager:
             return self._do(
                 "put",
                 url,
-                instance.to_xml(
-                    encoder=ARINXmlEncoder(), encoding="UTF-8", skip_empty=True
-                ),  # type: ignore
+                instance.to_xml(encoding="UTF-8", skip_empty=True),  # type: ignore
             )
 
     # delete
