@@ -11,6 +11,16 @@ if TYPE_CHECKING:
 
 
 class BaseManager:
+    """Base manager class providing CRUD operations for ARIN resources.
+
+    This class provides a standard interface for Create, Read, Update, and Delete
+    operations on ARIN resources through the Reg-RWS API.
+
+    Args:
+        api: The Api instance to use for HTTP requests.
+        model: The pydantic model class this manager operates on.
+    """
+
     def __init__(self, api: Api, model: type[BaseModel]) -> None:
         self.model = model
         self.api = api
@@ -47,6 +57,16 @@ class BaseManager:
             return res.instance
 
     def create(self, return_type: type[BaseModel] | None = None, *args, **kwargs):
+        """Create a new resource.
+
+        Args:
+            return_type: Optional model class to parse the response into.
+            *args: Positional arguments to pass to the model constructor.
+            **kwargs: Keyword arguments to pass to the model constructor.
+
+        Returns:
+            The created resource instance or None if creation failed.
+        """
         instance = self.model(*args, **kwargs)
         instance.manager = self
         url = instance.absolute_url
@@ -60,6 +80,14 @@ class BaseManager:
 
     # retrieve
     def from_handle(self, handle: str):
+        """Retrieve a resource by its handle.
+
+        Args:
+            handle: The ARIN handle of the resource to retrieve.
+
+        Returns:
+            The retrieved resource instance or None if not found.
+        """
         if self.endpoint_url:
             handle = handle.upper()
             url = self.endpoint_url + f"/{handle}"
@@ -67,6 +95,14 @@ class BaseManager:
 
     # update
     def save(self, instance: BaseModel):
+        """Update an existing resource.
+
+        Args:
+            instance: The model instance to save. Must have a valid handle.
+
+        Returns:
+            The updated resource instance or None if update failed.
+        """
         url = instance.absolute_url
         if url:
             return self._do(
@@ -81,6 +117,15 @@ class BaseManager:
         instance: type[BaseModel],
         return_type: type[BaseModel] | None = None,
     ):
+        """Delete a resource.
+
+        Args:
+            instance: The model instance to delete. Must have a valid handle.
+            return_type: Optional model class to parse the response into.
+
+        Returns:
+            The response from the delete operation or None if deletion failed.
+        """
         url = str(instance.absolute_url)
         if url:
             return self._do("delete", url, return_type=return_type)

@@ -13,7 +13,11 @@ if TYPE_CHECKING:
 
 
 class Response(requests.Response):
-    """An pydantic_xml-enabled :class:`requests.Response <requests.Response>` object."""
+    """A pydantic_xml-enabled :class:`requests.Response <requests.Response>` object.
+
+    This class extends the standard requests.Response to automatically parse
+    XML content into pydantic models based on HTTP status codes.
+    """
 
     def __init__(self, session: Session):
         super(Response, self).__init__()
@@ -22,7 +26,14 @@ class Response(requests.Response):
 
     @property
     def instance(self) -> xmlmodel_type | None:
-        """Get pydantic_xml instance from request content"""
+        """Get pydantic_xml instance from request content.
+
+        Returns:
+            The parsed pydantic model instance or None if parsing fails.
+
+        Raises:
+            RuntimeError: If no parser is registered for the response status code.
+        """
         if not self._object:
             try:
                 model: xmlmodel_type = self.session.handlers[self.status_code]
@@ -34,7 +45,11 @@ class Response(requests.Response):
         return self._object
 
     def raise_for_unknown_status(self):
-        """Raises :class:`HTTPError`, if one occurred."""
+        """Raises :class:`HTTPError` for unknown status codes.
+
+        Only raises an HTTPError if the status code is not registered
+        in the session's handlers dictionary.
+        """
 
         if self.status_code not in self.session.handlers.keys():
             super().raise_for_status()
@@ -47,8 +62,14 @@ class Response(requests.Response):
 
 
 class Session(requests.Session):
-    """A consumable session, for cookie persistence and connection pooling,
-    amongst other things.
+    """A consumable session with automatic XML parsing capabilities.
+
+    This session automatically converts responses to Response objects that can
+    parse XML content into pydantic models based on HTTP status codes.
+
+    Args:
+        handlers: Dictionary mapping HTTP status codes to pydantic model classes.
+        headers: Optional additional headers to include in requests.
     """
 
     def __init__(
@@ -62,12 +83,44 @@ class Session(requests.Session):
             self.headers.update(headers)  # pragma: no cover
 
     def response_hook(self, response, **kwargs) -> Response:
-        """Replace request's Response by a regrws Response instance."""
+        """Replace request's Response with a regrws Response instance.
+
+        This hook is automatically called for all responses and converts
+        the standard requests.Response to our custom Response class.
+
+        Args:
+            response: The original requests.Response object.
+            **kwargs: Additional keyword arguments (unused).
+
+        Returns:
+            A regrws Response instance with XML parsing capabilities.
+        """
         return Response._from_response(response, self)
 
 
 class Api:
-    """The Api object is the point of entry to regrws."""
+    """The main API client for interacting with ARIN's Reg-RWS service.
+
+    This class serves as the primary entry point for the regrws library.
+    It automatically creates manager instances for each supported model type
+    and provides a unified interface for CRUD operations.
+
+    Args:
+        base_url: Base URL for the ARIN Reg-RWS API. Defaults to ARIN production.
+        api_key: Your ARIN API key. Can also be set via REGRWS_API_KEY env var.
+        settings: Optional Settings object for advanced configuration.
+
+    Attributes:
+        poc: Manager for POC (Point of Contact) operations.
+        org: Manager for Organization operations.
+        net: Manager for Network operations.
+        customer: Manager for Customer operations.
+
+    Example:
+        >>> api = Api(api_key="your-api-key")
+        >>> poc = api.poc.from_handle("EXAMPLE-ARIN")
+        >>> print(f"POC: {poc.first_name} {poc.last_name}")
+    """
 
     def __init__(
         self,

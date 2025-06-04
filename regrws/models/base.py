@@ -16,6 +16,18 @@ NSMAP = {"": "http://www.arin.net/regrws/core/v1"}
 
 
 class BaseModel(BaseXmlModel):
+    """Base model class for all ARIN Reg-RWS resources.
+
+    This class extends pydantic-xml's BaseXmlModel with ARIN-specific
+    functionality including automatic manager integration and XML namespace
+    configuration.
+
+    Attributes:
+        _endpoint: The API endpoint path for this resource type.
+        _handle: The attribute name used as the resource handle (default: 'handle').
+        _manager_class: The manager class to use for API operations.
+    """
+
     _endpoint: ClassVar[str]
     _handle: ClassVar[str] = "handle"
     _manager_class: ClassVar[type[BaseManager]] = BaseManager
@@ -34,6 +46,11 @@ class BaseModel(BaseXmlModel):
 
     @property
     def absolute_url(self) -> str | None:
+        """Get the absolute URL for this resource.
+
+        Returns:
+            The full API URL for this resource, or None if no API or endpoint is set.
+        """
         if self._api and self._endpoint:
             handle = getattr(self, self._handle)
             if handle:
@@ -42,9 +59,19 @@ class BaseModel(BaseXmlModel):
         return None  # pragma: no cover
 
     def save(self):
+        """Save changes to this resource.
+
+        Returns:
+            The updated resource instance from the API response.
+        """
         return self._manager.save(self)
 
     def delete(self):
+        """Delete this resource.
+
+        Returns:
+            The response from the delete operation.
+        """
         return self._manager.delete(self)
 
     @property
@@ -53,7 +80,11 @@ class BaseModel(BaseXmlModel):
 
     @manager.setter
     def manager(self, manager: BaseManager):
-        """Set the API Manager to the model instance"""
+        """Set the API Manager to the model instance.
+
+        Args:
+            manager: The BaseManager instance to associate with this model.
+        """
         self._manager = manager
         self._api = manager.api
 
