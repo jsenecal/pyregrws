@@ -34,7 +34,7 @@ class CustomerManager(BaseManager):
                 url,
                 instance.to_xml(encoding="UTF-8", skip_empty=True),  # type: ignore
             )
-        return None # pragma: no cover
+        return None  # pragma: no cover
 
 
 class Customer(BaseModel, tag="customer", nsmap=NSMAP, search_mode="unordered"):

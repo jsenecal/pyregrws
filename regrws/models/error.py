@@ -1,4 +1,5 @@
 """Error Model"""
+
 from typing import List, Literal
 
 from pydantic_xml.model import element, wrapped

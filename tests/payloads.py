@@ -1,5 +1,4 @@
-POC_PAYLOAD = \
-    """<poc xmlns="http://www.arin.net/regrws/core/v1" >
+POC_PAYLOAD = """<poc xmlns="http://www.arin.net/regrws/core/v1" >
         <iso3166-1>
             <name>UNITED STATES</name>
             <code2>US</code2>
@@ -41,8 +40,7 @@ POC_PAYLOAD = \
   </phones>
     </poc>"""
 
-ORG_PAYLOAD = \
-    """<org xmlns="http://www.arin.net/regrws/core/v1" >
+ORG_PAYLOAD = """<org xmlns="http://www.arin.net/regrws/core/v1" >
         <iso3166-1>
             <name>UNITED STATES</name>
             <code2>US</code2>
@@ -102,8 +100,7 @@ CUSTOMER_PAYLOAD = """<customer xmlns="http://www.arin.net/regrws/core/v1" >
         <privateCustomer>false</privateCustomer>
     </customer>"""
 
-NETBLOCK_PAYLOAD = \
-    """<netBlock xmlns="http://www.arin.net/regrws/core/v1" >
+NETBLOCK_PAYLOAD = """<netBlock xmlns="http://www.arin.net/regrws/core/v1" >
         <type>A</type>
         <description>DESCRIPTION</description>
         <startAddress>010.000.000.000</startAddress>
@@ -111,8 +108,7 @@ NETBLOCK_PAYLOAD = \
         <cidrLength>24</cidrLength>
     </netBlock>"""
 
-NET_PAYLOAD = \
-    """<net xmlns="http://www.arin.net/regrws/core/v1" >
+NET_PAYLOAD = """<net xmlns="http://www.arin.net/regrws/core/v1" >
         <version>4</version>
         <comment>
             <line number = "1">Line 1</line>
@@ -142,8 +138,7 @@ NET_PAYLOAD = \
         </pocLinks>
     </net>"""
 
-ERROR_PAYLOAD = \
-    """<error xmlns="http://www.arin.net/regrws/core/v1" >
+ERROR_PAYLOAD = """<error xmlns="http://www.arin.net/regrws/core/v1" >
         <message>MESSAGE</message>
         <code>E_SCHEMA_VALIDATION</code>
         <components>
@@ -157,8 +152,7 @@ ERROR_PAYLOAD = \
         </additionalInfo>
     </error>"""
 
-TICKET_PAYLOAD = \
-    """<ticket xmlns="http://www.arin.net/regrws/core/v1"
+TICKET_PAYLOAD = """<ticket xmlns="http://www.arin.net/regrws/core/v1"
         xmlns:ns2="http://www.arin.net/regrws/messages/v1"
         xmlns:ns4="http://www.arin.net/regrws/shared-ticket/v1">
         <messages>
@@ -190,8 +184,7 @@ TICKET_PAYLOAD = \
         <webTicketResolution>ACCEPTED</webTicketResolution>
     </ticket>"""
 
-TICKETED_REQUEST_PAYLOAD = \
-    f"""<ticketedRequest xmlns="http://www.arin.net/regrws/core/v1">
+TICKETED_REQUEST_PAYLOAD = f"""<ticketedRequest xmlns="http://www.arin.net/regrws/core/v1">
         {TICKET_PAYLOAD}
         {NET_PAYLOAD}
     </ticketedRequest>"""

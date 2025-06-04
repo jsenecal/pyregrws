@@ -55,6 +55,7 @@ def test_requests_wrapper(mocked_responses):
         assert org
         assert isinstance(org, Org)
 
+
 def test_requests_wrapper_with_errors(mocked_responses):
     mocked_responses.get(
         "https://reg.ote.arin.net/rest/org/ARIN?apikey=APIKEY",
@@ -84,7 +85,10 @@ def test_requests_wrapper_with_errors(mocked_responses):
             f"https://reg.ote.arin.net/rest/org/{org_id}", params={"apikey": "APIKEY"}
         )
         assert res.status_code == 400
-        with pytest.raises(RuntimeError, match=f"Parser for status code {res.status_code} is missing in session."):
+        with pytest.raises(
+            RuntimeError,
+            match=f"Parser for status code {res.status_code} is missing in session.",
+        ):
             res.instance
         with pytest.raises(requests.HTTPError):
             res.raise_for_unknown_status()

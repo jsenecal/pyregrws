@@ -1,4 +1,5 @@
 """Ticket and related models"""
+
 from __future__ import annotations
 
 from typing import List, Literal, Optional
@@ -19,10 +20,7 @@ TICKET_NSMAP.update(
 
 
 class TicketMessage(
-    BaseModel,
-    tag="message",
-    nsmap=TICKET_NSMAP,
-    search_mode="unordered"
+    BaseModel, tag="message", nsmap=TICKET_NSMAP, search_mode="unordered"
 ):
     message_id: str = element(tag="messageId", ns="mv1")
     created_date: str = element(tag="createdDate", ns="mv1")
