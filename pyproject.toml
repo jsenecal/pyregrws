@@ -30,7 +30,7 @@ certifi = "^2025.0.0"
 [tool.poetry.group.dev.dependencies]
 pytest-xdist = "^3.7.0"
 ipython = "^9.0.0"
-pytest = "8.4.0"
+pytest = "8.4.1"
 xmldiff = "^2.4"
 lxml = "^5.0.0"
 pytest-cov = "^6.0.0"
