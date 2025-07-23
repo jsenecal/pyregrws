@@ -157,7 +157,9 @@ class Net(BaseModel, tag="net", nsmap=NSMAP, search_mode="unordered"):
         "originASes", element(tag="originAS", default_factory=list)
     )
 
-    poc_links: List[PocLinkRef] = wrapped("pocLinks", element(tag="pocLinkRef"))
+    poc_links: Optional[List[PocLinkRef]] = wrapped(
+        "pocLinks", element(tag="pocLinkRef", default_factory=list)
+    )
 
     _endpoint: ClassVar[str] = "/net"
     _manager_class: ClassVar[type[BaseManager]] = NetManager
