@@ -33,7 +33,7 @@ ipython = "^9.0.0"
 pytest = "8.4.2"
 xmldiff = "^2.4"
 lxml = "^6.0.0"
-pytest-cov = "^6.0.0"
+pytest-cov = "^7.0.0"
 responses = "^0.25.0"
 ruff = "^0.12.0"
 
