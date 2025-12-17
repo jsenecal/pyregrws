@@ -108,5 +108,5 @@ class TestAPI:
             content_type=constants.CONTENT_TYPE,
         )
 
-        new_insance = manager.create(**instance.dict())
+        new_insance = manager.create(**instance.model_dump())
         assert new_insance

@@ -1,7 +1,7 @@
 from typing import ClassVar, List, Literal, Optional
 
-from pydantic import root_validator
-from pydantic_xml.model import attr, element, wrapped
+from pydantic import model_validator
+from pydantic_xml import attr, element, wrapped
 
 from regrws.models.base import NSMAP, BaseModel
 from regrws.models.nested import Iso31661, MultiLineElement, Phone
@@ -32,27 +32,30 @@ class Poc(BaseModel, tag="poc", nsmap=NSMAP, search_mode="unordered"):
         "streetAddress", element(tag="line")
     )
     city: str = element()
-    iso3166_2: Optional[iso3166_2_type] = element(tag="iso3166-2")
-    postal_code: Optional[str] = element(tag="postalCode")
+    iso3166_2: Optional[iso3166_2_type] = element(tag="iso3166-2", default=None)
+    postal_code: Optional[str] = element(tag="postalCode", default=None)
 
-    comment: Optional[List[MultiLineElement]] = wrapped("comment", element(tag="line"))
+    comment: Optional[List[MultiLineElement]] = wrapped(
+        "comment", element(tag="line"), default=None
+    )
 
-    handle: Optional[str] = element()
-    registration_date: Optional[str] = element(tag="registrationDate")
+    handle: Optional[str] = element(default=None)
+    registration_date: Optional[str] = element(tag="registrationDate", default=None)
 
     contact_type: Literal["PERSON", "ROLE"] = element(tag="contactType")
 
-    company_name: Optional[str] = element(tag="companyName")
+    company_name: Optional[str] = element(tag="companyName", default=None)
 
-    first_name: Optional[str] = element(tag="firstName")
-    middle_name: Optional[str] = element(tag="middleName")
-    last_name: Optional[str] = element(tag="lastName")
+    first_name: Optional[str] = element(tag="firstName", default=None)
+    middle_name: Optional[str] = element(tag="middleName", default=None)
+    last_name: Optional[str] = element(tag="lastName", default=None)
 
     phones: List[Phone] = wrapped("phones", element(tag="phone"))
 
     _endpoint: ClassVar[str] = "/poc"
 
-    @root_validator(pre=True)
+    @model_validator(mode="before")
+    @classmethod
     def check_contact_type_and_payload(cls, values):  # pragma: no cover
         contact_type = values.get("contact_type")
 

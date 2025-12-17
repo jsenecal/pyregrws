@@ -1,7 +1,7 @@
 from enum import IntEnum
 from typing import Literal
 
-from pydantic_xml.model import attr, element
+from pydantic_xml import attr, element
 
 from regrws.models.base import NSMAP, BaseModel
 from regrws.models.types import code2_type, code3_type
@@ -55,7 +55,7 @@ class PhoneType(BaseModel, tag="type", nsmap=NSMAP, search_mode="unordered"):
 class Phone(BaseModel, tag="phone", nsmap=NSMAP, search_mode="unordered"):
     type: PhoneType = element()
     number: str = element()
-    extension: str | None = element()
+    extension: str | None = element(default=None)
 
 
 class OriginAS(BaseModel, tag="originAS", nsmap=NSMAP, search_mode="unordered"):

@@ -1,10 +1,9 @@
 from __future__ import annotations
 
-import inspect
-from enum import Enum
-from typing import TYPE_CHECKING, ClassVar, no_type_check
+from typing import TYPE_CHECKING, ClassVar
 
-from pydantic_xml.model import BaseXmlModel
+from pydantic import ConfigDict, PrivateAttr
+from pydantic_xml import BaseXmlModel
 
 from regrws.api.manager import BaseManager
 
@@ -28,21 +27,16 @@ class BaseModel(BaseXmlModel):
         _manager_class: The manager class to use for API operations.
     """
 
+    model_config = ConfigDict(
+        str_strip_whitespace=True,
+    )
+
     _endpoint: ClassVar[str]
     _handle: ClassVar[str] = "handle"
     _manager_class: ClassVar[type[BaseManager]] = BaseManager
 
-    _api: Api
-    _manager: BaseManager
-
-    class Config:
-        anystr_strip_whitespace = True
-        underscore_attrs_are_private = True
-
-        xml_encoders = {
-            type(bool): lambda v: "true" if v else "false",
-            type(Enum): lambda v: str(v.value),
-        }
+    _api: Api = PrivateAttr()
+    _manager: BaseManager = PrivateAttr()
 
     @property
     def absolute_url(self) -> str | None:
@@ -87,23 +81,3 @@ class BaseModel(BaseXmlModel):
         """
         self._manager = manager
         self._api = manager.api
-
-    @no_type_check
-    def __setattr__(self, name, value):
-        """
-        Allows proper use of properties with setters
-        See https://github.com/pydantic/pydantic/issues/1577
-        """
-        try:
-            super().__setattr__(name, value)
-        except ValueError as exc:
-            setters = inspect.getmembers(
-                self.__class__,
-                predicate=lambda x: isinstance(x, property) and x.fset is not None,
-            )
-            for setter_name, _ in setters:
-                if setter_name == name:
-                    object.__setattr__(self, name, value)
-                    break
-            else:
-                raise exc  # pragma: no cover

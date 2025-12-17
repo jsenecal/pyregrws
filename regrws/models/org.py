@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import ClassVar, List, Optional
 
 from pydantic import HttpUrl
-from pydantic_xml.model import element, wrapped
+from pydantic_xml import element, wrapped
 
 from regrws.api.manager import BaseManager
 from regrws.models.base import NSMAP, BaseModel
@@ -25,18 +25,20 @@ class Org(BaseModel, tag="org", nsmap=NSMAP, search_mode="unordered"):
         "streetAddress", element(tag="line")
     )
     city: str = element()
-    iso3166_2: Optional[iso3166_2_type] = element(tag="iso3166-2")
-    postal_code: Optional[str] = element(tag="postalCode")
+    iso3166_2: Optional[iso3166_2_type] = element(tag="iso3166-2", default=None)
+    postal_code: Optional[str] = element(tag="postalCode", default=None)
 
-    comment: Optional[List[MultiLineElement]] = wrapped("comment", element(tag="line"))
+    comment: Optional[List[MultiLineElement]] = wrapped(
+        "comment", element(tag="line"), default=None
+    )
 
-    handle: Optional[str] = element()
-    registration_date: Optional[str] = element(tag="registrationDate")
+    handle: Optional[str] = element(default=None)
+    registration_date: Optional[str] = element(tag="registrationDate", default=None)
 
     org_name: str = element(tag="orgName")
-    dba_name: Optional[str] = element(tag="dbaName")
-    tax_id: Optional[str] = element(tag="taxId")
-    org_url: Optional[HttpUrl] = element(tag="orgUrl")
+    dba_name: Optional[str] = element(tag="dbaName", default=None)
+    tax_id: Optional[str] = element(tag="taxId", default=None)
+    org_url: Optional[HttpUrl] = element(tag="orgUrl", default=None)
 
     poc_links: List[PocLinkRef] = wrapped("pocLinks", element(tag="pocLinkRef"))
 

@@ -40,7 +40,7 @@ def test_cust_manager(mocked_responses, api: type[Api]):
     net = api.net.from_handle(handle="Net-10-0-0-0-1")
     customer = Customer.from_xml(CUSTOMER_PAYLOAD)
     assert customer is not None, "customer should not be None"
-    api.customer.create_for_net(net=net, **customer.dict())
+    api.customer.create_for_net(net=net, **customer.model_dump())
 
 
 def test_org_manager(mocked_responses, api: type[Api]):
@@ -58,7 +58,7 @@ def test_org_manager(mocked_responses, api: type[Api]):
     )
     instance = api.org.from_handle(handle="ARIN")
     assert instance is not None, "Instance should not be None"
-    params = instance.dict()
+    params = instance.model_dump()
     params.pop("handle")
     assert api.org.create(**params)
 
