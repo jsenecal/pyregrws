@@ -32,6 +32,6 @@ class Error(BaseModel, tag="error", nsmap=NSMAP, search_mode="unordered"):
         "E_UNSPECIFIED",
     ] = element()
     components: List[ErrorComponent] = wrapped("components", element(tag="component", default_factory=list))
-    additionnal_info: List[str] = wrapped(
+    additional_info: List[str] = wrapped(
         "additionalInfo", element(tag="message", default_factory=list)
     )
