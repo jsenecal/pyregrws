@@ -1,5 +1,6 @@
 import pytest
 import responses
+from responses.matchers import header_matcher
 
 from regrws.api import Api, constants
 from regrws.models.customer import Customer
@@ -36,6 +37,7 @@ def test_cust_manager(mocked_responses, api: type[Api]):
         body=CUSTOMER_PAYLOAD.encode(),
         status=200,
         content_type=constants.CONTENT_TYPE,
+        match=[header_matcher({"Content-Type": "application/xml"})],
     )
     net = api.net.from_handle(handle="Net-10-0-0-0-1")
     customer = Customer.from_xml(CUSTOMER_PAYLOAD)
@@ -55,6 +57,7 @@ def test_org_manager(mocked_responses, api: type[Api]):
         body=TICKET_PAYLOAD.encode(),
         status=200,
         content_type=constants.CONTENT_TYPE,
+        match=[header_matcher({"Content-Type": "application/xml"})],
     )
     instance = api.org.from_handle(handle="ARIN")
     assert instance is not None, "Instance should not be None"
@@ -93,18 +96,21 @@ def test_net_manager(mocked_responses, api: type[Api]):
         body=TICKETED_REQUEST_PAYLOAD.encode(),
         status=200,
         content_type=constants.CONTENT_TYPE,
+        match=[header_matcher({"Content-Type": "application/xml"})],
     )
     mocked_responses.put(
         "https://reg.ote.arin.net/rest/net/NET-10-0-0-0-1/reassign?apikey=APIKEY",
         body=TICKETED_REQUEST_PAYLOAD.encode(),
         status=200,
         content_type=constants.CONTENT_TYPE,
+        match=[header_matcher({"Content-Type": "application/xml"})],
     )
     mocked_responses.put(
         "https://reg.ote.arin.net/rest/net/NET-10-0-0-0-1/reallocate?apikey=APIKEY",
         body=TICKETED_REQUEST_PAYLOAD.encode(),
         status=200,
         content_type=constants.CONTENT_TYPE,
+        match=[header_matcher({"Content-Type": "application/xml"})],
     )
 
     with pytest.raises(NotImplementedError):

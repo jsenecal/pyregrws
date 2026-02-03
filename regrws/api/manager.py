@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Literal
 
+from regrws.api import constants
 from regrws.api.core import Response
 
 
@@ -47,7 +48,7 @@ class BaseManager:
         with Session(handlers) as session:  # type: ignore
             headers = {}
             if verb in ('post', 'put'):
-                headers['Content-Type'] = 'application/xml'
+                headers['Content-Type'] = constants.CONTENT_TYPE
             session_method = getattr(session, verb)
             res: Response = session_method(url, headers=headers, params=self.url_params, data=data)  # type: ignore
             res.raise_for_unknown_status()
