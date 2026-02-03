@@ -34,7 +34,7 @@ from regrws.models import Poc, Org, Net, Customer
 
 # Initialize the API client
 api = Api(
-    base_url="https://reg.arin.net/rws",  # Optional, defaults to ARIN production
+    base_url="https://reg.arin.net/",  # Optional, defaults to ARIN production
     api_key="your-api-key-here"           # Or set REGRWS_API_KEY env var
 )
 
@@ -70,8 +70,10 @@ The library can be configured via environment variables or by passing parameters
 
 ### Environment Variables
 
-- `REGRWS_BASE_URL`: Base URL for the ARIN Reg-RWS API (default: `https://reg.arin.net/rws`)
+- `REGRWS_BASE_URL`: Base URL for the ARIN Reg-RWS API (default: `https://reg.arin.net/`)
 - `REGRWS_API_KEY`: Your ARIN API key (required)
+
+> **Warning:** For testing purposes, use ARIN's Operational Test and Evaluation (OTE) environment (`https://reg.ote.arin.net/`) instead of the production URL. The OTE environment provides a safe sandbox that will not affect real registration data.
 
 ### Direct Configuration
 
@@ -81,13 +83,13 @@ from regrws.settings import Settings
 
 # Method 1: Pass parameters directly
 api = Api(
-    base_url="https://reg.arin.net/rws",
+    base_url="https://reg.arin.net/",
     api_key="your-api-key"
 )
 
 # Method 2: Use Settings object
 settings = Settings(
-    base_url="https://reg.arin.net/rws",
+    base_url="https://reg.arin.net/",
     api_key="your-api-key"
 )
 api = Api(settings=settings)

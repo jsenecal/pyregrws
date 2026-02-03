@@ -17,7 +17,7 @@ class Settings(BaseSettings):
 
     Example:
         >>> settings = Settings(
-        ...     base_url="https://reg.arin.net/rws",
+        ...     base_url="https://reg.arin.net/",
         ...     api_key="your-api-key"
         ... )
     """
