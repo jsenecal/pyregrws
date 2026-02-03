@@ -1,6 +1,7 @@
 from enum import IntEnum
-from typing import Literal
+from typing import Literal, Optional
 
+from pydantic import root_validator
 from pydantic_xml.model import attr, element
 
 from regrws.models.base import NSMAP, BaseModel
@@ -31,10 +32,16 @@ class IPVersionEnum(IntEnum):
 
 
 class Iso31661(BaseModel, tag="iso3166-1", nsmap=NSMAP, search_mode="unordered"):
-    name: str = element()
-    code2: code2_type = element()
-    code3: code3_type = element()
-    e164: int = element()
+    name: Optional[str] = element(default=None)
+    code2: Optional[code2_type] = element(default=None)
+    code3: Optional[code3_type] = element(default=None)
+    e164: Optional[int] = element(default=None)
+
+    @root_validator
+    def require_code2_or_code3(cls, values):
+        if values.get("code2") is None and values.get("code3") is None:
+            raise ValueError("Either code2 or code3 must be specified")
+        return values
 
 
 class MultiLineElement(BaseModel):
