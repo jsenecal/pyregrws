@@ -1,5 +1,6 @@
 import pytest
 import responses
+from responses.matchers import header_matcher
 
 from regrws.api import constants
 from regrws.api.core import Api
@@ -70,6 +71,7 @@ class TestAPI:
             body=payload.encode(),
             status=200,
             content_type=constants.CONTENT_TYPE,
+            match=[header_matcher({"Content-Type": "application/xml"})],
         )
 
         instance.save()
@@ -106,6 +108,7 @@ class TestAPI:
             body=payload.encode(),
             status=200,
             content_type=constants.CONTENT_TYPE,
+            match=[header_matcher({"Content-Type": "application/xml"})],
         )
 
         new_insance = manager.create(**instance.model_dump())
