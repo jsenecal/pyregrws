@@ -152,6 +152,8 @@ ERROR_PAYLOAD = """<error xmlns="http://www.arin.net/regrws/core/v1" >
         </additionalInfo>
     </error>"""
 
+ERROR_EMPTY_COMPONENTS_PAYLOAD = """<error xmlns="http://www.arin.net/regrws/core/v1"><additionalInfo/><code>E_AUTHENTICATION</code><components/><message>The API key is not authorized to make that request.</message></error>"""
+
 TICKET_PAYLOAD = """<ticket xmlns="http://www.arin.net/regrws/core/v1"
         xmlns:ns2="http://www.arin.net/regrws/messages/v1"
         xmlns:ns4="http://www.arin.net/regrws/shared-ticket/v1">
