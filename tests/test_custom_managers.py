@@ -15,7 +15,7 @@ from .payloads import (
 
 @pytest.fixture()
 def api():
-    return Api(api_key="APIKEY")
+    return Api(api_key="APIKEY", base_url="https://reg.ote.arin.net/")
 
 
 @pytest.fixture
