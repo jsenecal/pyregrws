@@ -7,6 +7,7 @@ from regrws.models.tickets import TicketRequest
 
 from .payloads import (
     CUSTOMER_PAYLOAD,
+    ERROR_EMPTY_COMPONENTS_PAYLOAD,
     ERROR_PAYLOAD,
     NET_PAYLOAD,
     NETBLOCK_PAYLOAD,
@@ -49,6 +50,21 @@ class TestModels:
         ).decode()
         print("\n" + instance_xml)
         assert instance_xml is not False
+
+
+class TestErrorEmptyComponents:
+    """Test that Error parses correctly when components is empty.
+
+    ARIN returns <components/> (empty) for some errors, e.g. E_AUTHENTICATION.
+    See https://github.com/jsenecal/pyregrws/issues/95
+    """
+
+    def test_from_xml(self, cov):
+        error = Error.from_xml(ERROR_EMPTY_COMPONENTS_PAYLOAD)
+        assert error.code == "E_AUTHENTICATION"
+        assert error.message == "The API key is not authorized to make that request."
+        assert error.components == []
+        assert error.additionnal_info == []
 
 
 class TestIso31661:
