@@ -64,7 +64,7 @@ class TestErrorEmptyComponents:
         assert error.code == "E_AUTHENTICATION"
         assert error.message == "The API key is not authorized to make that request."
         assert error.components == []
-        assert error.additionnal_info == []
+        assert error.additional_info == []
 
 
 class TestIso31661:
