@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Literal
 
+from regrws.api import constants
 from regrws.api.core import Response
 
 
@@ -45,8 +46,11 @@ class BaseManager:
         handlers = {200: return_type or self.model}
         handlers.update({i: Error for i in [400, 401, 403, 404, 405, 406, 409]})
         with Session(handlers) as session:  # type: ignore
+            headers = {}
+            if verb in ('post', 'put'):
+                headers['Content-Type'] = constants.CONTENT_TYPE
             session_method = getattr(session, verb)
-            res: Response = session_method(url, params=self.url_params, data=data)  # type: ignore
+            res: Response = session_method(url, headers=headers, params=self.url_params, data=data)  # type: ignore
             res.raise_for_unknown_status()
 
             if res.instance:
