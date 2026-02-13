@@ -48,6 +48,8 @@ class Poc(BaseModel, tag="poc", nsmap=NSMAP, search_mode="unordered"):
     middle_name: Optional[str] = element(tag="middleName")
     last_name: Optional[str] = element(tag="lastName")
 
+    emails: List[str] = wrapped("emails", element(tag="email"))
+
     phones: List[Phone] = wrapped("phones", element(tag="phone"))
 
     _endpoint: ClassVar[str] = "/poc"
