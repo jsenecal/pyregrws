@@ -1,15 +1,15 @@
-[tool.poetry]
+[project]
 name = "pyregrws"
-version = "1.0.0b6"
+version = "1.0.0"
 description = "Python library to retrieve and modify records within ARIN's database through their Reg-RWS service"
-authors = ["Jonathan Senecal <contact@jonathansenecal.com>"]
-homepage = "https://github.com/jsenecal/pyregrws"
-license = "Apache 2.0"
+authors = [{ name = "Jonathan Senecal", email = "contact@jonathansenecal.com" }]
+license = "Apache-2.0"
+license-files = ["LICENSE"]
 readme = "README.md"
+requires-python = ">=3.11"
 classifiers = [
-  "Development Status :: 3 - Alpha",
+  "Development Status :: 5 - Production/Stable",
   "Intended Audience :: Developers",
-  "License :: OSI Approved :: Apache Software License",
   "Operating System :: OS Independent",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
@@ -17,26 +17,28 @@ classifiers = [
   "Topic :: Software Development :: Libraries :: Python Modules",
   "Framework :: Pydantic",
 ]
-packages = [{ include = "regrws" }]
+dependencies = [
+  "requests>=2.28.1,<3",
+  "pydantic>=2.0,<3",
+  "pydantic-xml>=2.0,<3",
+  "pydantic-settings[dotenv]>=2.0,<3",
+  "certifi>=2026.0.0,<2027",
+]
 
+[project.urls]
+Homepage = "https://github.com/jsenecal/pyregrws"
 
-[tool.poetry.dependencies]
-python = "^3.11"
-requests = "^2.28.1"
-pydantic = "^2.0"
-pydantic-xml = "^2.0"
-pydantic-settings = { extras = ["dotenv"], version = "^2.0" }
-certifi = "^2026.0.0"
-
-[tool.poetry.group.dev.dependencies]
-pytest-xdist = "^3.7.0"
-ipython = "^9.0.0"
-pytest = "9.0.2"
-xmldiff = "^2.4"
-lxml = "^6.0.0"
-pytest-cov = "^7.0.0"
-responses = "^0.25.0"
-ruff = "^0.14.0"
+[dependency-groups]
+dev = [
+  "pytest-xdist>=3.7.0,<4",
+  "ipython>=9.0.0,<10",
+  "pytest==9.0.2",
+  "xmldiff>=2.4,<3",
+  "lxml>=6.0.0,<7",
+  "pytest-cov>=7.0.0,<8",
+  "responses>=0.25.0,<0.26",
+  "ruff>=0.14.0,<0.15",
+]
 
 [tool.pytest.ini_options]
 
@@ -70,6 +72,10 @@ disallow_untyped_defs = true
 init_forbid_extra = true
 init_typed = true
 
+[tool.uv.build-backend]
+module-name = "regrws"
+module-root = ""
+
 [build-system]
-requires = ["poetry-core>=1.3.2"]
-build-backend = "poetry.core.masonry.api"
+requires = ["uv_build>=0.9.0,<0.10.0"]
+build-backend = "uv_build"

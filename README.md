@@ -27,10 +27,10 @@ Install from PyPI using pip:
 pip install pyregrws
 ```
 
-Or using poetry:
+Or using uv:
 
 ```bash
-poetry add pyregrws
+uv add pyregrws
 ```
 
 ## Quick Start
@@ -239,27 +239,27 @@ git clone https://github.com/jsenecal/pyregrws.git
 cd pyregrws
 
 # Install dependencies
-poetry install
+uv sync
 ```
 
 ### Running Tests
 
 ```bash
 # Run all tests with coverage
-poetry run pytest --cov -n 2 --cov-report xml --cov-report term-missing
+uv run pytest --cov -n 2 --cov-report xml --cov-report term-missing
 
 # Run a specific test
-poetry run pytest tests/test_api.py::TestAPI::test_manager_from_handle
+uv run pytest tests/test_api.py::TestAPI::test_manager_from_handle
 ```
 
 ### Code Quality
 
 ```bash
 # Lint code
-poetry run ruff check
+uv run ruff check
 
 # Format code  
-poetry run ruff format
+uv run ruff format
 ```
 
 ## Contributing
