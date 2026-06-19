@@ -143,8 +143,8 @@ class Api:
             if api_key is not None:
                 kwargs["api_key"] = api_key
             settings = Settings(**kwargs)  # type: ignore
-        base_url = settings.base_url
-        self.base_url = f"{base_url if base_url[-1] != '/' else base_url[:-1]}/rest"
+        base_url = str(settings.base_url)
+        self.base_url = f"{base_url.rstrip('/')}/rest"
         self.apikey = settings.api_key
 
         for model in [Customer, Net, Org, Poc]:

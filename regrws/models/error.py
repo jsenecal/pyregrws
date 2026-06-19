@@ -2,7 +2,7 @@
 
 from typing import List, Literal
 
-from pydantic_xml.model import element, wrapped
+from pydantic_xml import element, wrapped
 
 from regrws.models.base import NSMAP, BaseModel
 

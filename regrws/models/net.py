@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, ClassVar, List, Literal, Optional
 
-from pydantic import root_validator
-from pydantic_xml.model import element, wrapped
+from pydantic import model_validator
+from pydantic_xml import element, wrapped
 
 from regrws.api.manager import BaseManager
 
@@ -125,12 +125,15 @@ class NetBlock(BaseModel, tag="netBlock", nsmap=NSMAP, search_mode="unordered"):
         "RX",
         "S",
     ] = element()
-    description: Optional[str] = element()
+    description: Optional[str] = element(default=None)
     start_address: ZeroPaddedIPvAnyAddress = element(tag="startAddress")
-    end_address: Optional[ZeroPaddedIPvAnyAddress] = element(tag="endAddress")
-    cidr_length: Optional[cidr_length_type] = element(tag="cidrLength")
+    end_address: Optional[ZeroPaddedIPvAnyAddress] = element(
+        tag="endAddress", default=None
+    )
+    cidr_length: Optional[cidr_length_type] = element(tag="cidrLength", default=None)
 
-    @root_validator(pre=True)
+    @model_validator(mode="before")
+    @classmethod
     def check_payload(cls, values):  # pragma: no cover
         results = values.get("end_address") is None, values.get("cidr_length") is None
         if all(results):
@@ -140,31 +143,36 @@ class NetBlock(BaseModel, tag="netBlock", nsmap=NSMAP, search_mode="unordered"):
 
 class Net(BaseModel, tag="net", nsmap=NSMAP, search_mode="unordered"):
     version: IPVersionEnum = element()
-    comment: Optional[List[MultiLineElement]] = wrapped("comment", element(tag="line"))
+    comment: Optional[List[MultiLineElement]] = wrapped(
+        "comment", element(tag="line"), default=None
+    )
 
-    org_handle: Optional[str] = element(tag="orgHandle")
-    customer_handle: Optional[str] = element(tag="customerHandle")
+    org_handle: Optional[str] = element(tag="orgHandle", default=None)
+    customer_handle: Optional[str] = element(tag="customerHandle", default=None)
 
-    handle: Optional[str] = element()
-    registration_date: Optional[str] = element(tag="registrationDate")
+    handle: Optional[str] = element(default=None)
+    registration_date: Optional[str] = element(tag="registrationDate", default=None)
 
-    net_name: Optional[str] = element(tag="netName")
-    net_blocks: Optional[List[NetBlock]] = wrapped("netBlocks", element(tag="netBlock"))
+    net_name: Optional[str] = element(tag="netName", default=None)
+    net_blocks: Optional[List[NetBlock]] = wrapped(
+        "netBlocks", element(tag="netBlock"), default=None
+    )
 
-    parent_net_handle: Optional[str] = element(tag="parentNetHandle")
+    parent_net_handle: Optional[str] = element(tag="parentNetHandle", default=None)
 
     origin_ases: Optional[List[OriginAS]] = wrapped(
-        "originASes", element(tag="originAS", default_factory=list)
+        "originASes", element(tag="originAS"), default=None
     )
 
     poc_links: Optional[List[PocLinkRef]] = wrapped(
-        "pocLinks", element(tag="pocLinkRef", default_factory=list)
+        "pocLinks", element(tag="pocLinkRef"), default=None
     )
 
     _endpoint: ClassVar[str] = "/net"
     _manager_class: ClassVar[type[BaseManager]] = NetManager
 
-    @root_validator(pre=True)
+    @model_validator(mode="before")
+    @classmethod
     def check_related_handle(cls, values):  # pragma: no cover
         results = values.get("org_handle"), values.get("customer_handle")
         results_are_none = map(lambda x: x is None, results)

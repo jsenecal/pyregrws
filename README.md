@@ -6,11 +6,18 @@ A Python library for interacting with ARIN's Reg-RWS (Registry RESTful Web Servi
 
 ## Features
 
-- **Type-safe models**: Built with pydantic-xml for robust XML serialization/deserialization
+- **Type-safe models**: Built with Pydantic v2 and pydantic-xml v2 for robust XML serialization/deserialization
 - **Complete CRUD operations**: Create, read, update, and delete ARIN resources
 - **Automatic manager integration**: Each model type has an associated manager for API operations
 - **Error handling**: Built-in error response handling with proper HTTP status code mapping
-- **Environment configuration**: Configurable via environment variables with sensible defaults
+- **Environment configuration**: Configurable via environment variables with sensible defaults (powered by pydantic-settings)
+
+## Requirements
+
+- Python 3.11+
+- Pydantic v2.0+
+- pydantic-xml v2.0+
+- pydantic-settings v2.0+
 
 ## Installation
 

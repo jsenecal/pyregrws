@@ -1,7 +1,7 @@
 import pytest
 import requests
 import responses
-from pydantic.error_wrappers import ValidationError
+from pydantic import ValidationError
 
 from regrws.api import constants
 from regrws.api.core import Response, Session
@@ -25,7 +25,7 @@ def test_invalid_model(cov):
     res._content = b'<org xmlns="http://www.arin.net/regrws/core/v1" ></org>'
     with pytest.raises(ValidationError) as exc:
         res.instance
-    exc.match("type=value_error.missing")
+    exc.match("type=missing")
 
 
 @pytest.fixture

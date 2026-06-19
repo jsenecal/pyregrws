@@ -4,14 +4,14 @@ from __future__ import annotations
 
 from typing import ClassVar, List
 
-from pydantic_xml.model import element, wrapped
+from pydantic_xml import element, wrapped
 
-
+from regrws.models.base import NSMAP, BaseModel
 from regrws.models.nested import Iso31661, MultiLineElement
 from regrws.models.net import Net
 from regrws.models.types import iso3166_2_type
 
-from regrws.models.base import NSMAP, BaseManager, BaseModel
+from regrws.api.manager import BaseManager
 
 
 class CustomerManager(BaseManager):
@@ -49,16 +49,18 @@ class Customer(BaseModel, tag="customer", nsmap=NSMAP, search_mode="unordered"):
         "streetAddress", element(tag="line")
     )
     city: str = element()
-    iso3166_2: iso3166_2_type | None = element(tag="iso3166-2")
-    postal_code: str | None = element(tag="postalCode")
+    iso3166_2: iso3166_2_type | None = element(tag="iso3166-2", default=None)
+    postal_code: str | None = element(tag="postalCode", default=None)
 
-    comment: List[MultiLineElement] | None = wrapped("comment", element(tag="line"))
+    comment: List[MultiLineElement] | None = wrapped(
+        "comment", element(tag="line"), default=None
+    )
 
-    handle: str | None = element()
-    parent_org_handle: str | None = element(tag="parentOrgHandle")
-    registration_date: str | None = element(tag="registrationDate")
+    handle: str | None = element(default=None)
+    parent_org_handle: str | None = element(tag="parentOrgHandle", default=None)
+    registration_date: str | None = element(tag="registrationDate", default=None)
 
-    private_customer: bool | None = element(tag="privateCustomer")
+    private_customer: bool | None = element(tag="privateCustomer", default=None)
 
     _endpoint: ClassVar[str] = "/customer"
     _manager_class: ClassVar[type[BaseManager]] = CustomerManager

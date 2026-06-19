@@ -4,13 +4,13 @@ from __future__ import annotations
 
 from typing import List, Literal, Optional
 
-from pydantic_xml.model import element, wrapped
+from pydantic_xml import element, wrapped
 
 from regrws.models.base import NSMAP, BaseModel
 from regrws.models.nested import Attachment, MultiLineElement
 from regrws.models.net import Net
 
-TICKET_NSMAP = NSMAP
+TICKET_NSMAP = NSMAP.copy()
 TICKET_NSMAP.update(
     {
         "mv1": "http://www.arin.net/regrws/messages/v1",
@@ -30,11 +30,11 @@ class TicketMessage(
     attachments: List[Attachment] = wrapped("attachments", element(tag="attachment"))
 
 
-class Ticket(BaseModel, tag="ticket", nsmap=NSMAP, search_mode="unordered"):
+class Ticket(BaseModel, tag="ticket", nsmap=TICKET_NSMAP, search_mode="unordered"):
     messages: List[TicketMessage] = wrapped("messages", element(tag="message"))
     ticket_no: str = element(tag="ticketNo")
-    shared: bool | None = element(ns="stv1")
-    org_handle: str | None = element(tag="orgHandle", ns="stv1")
+    shared: bool | None = element(ns="stv1", default=None)
+    org_handle: str | None = element(tag="orgHandle", ns="stv1", default=None)
     created_date: str = element(tag="createdDate")
     resolved_date: str = element(tag="resolvedDate")
     closed_date: str = element(tag="closedDate")
@@ -93,5 +93,5 @@ class Ticket(BaseModel, tag="ticket", nsmap=NSMAP, search_mode="unordered"):
 class TicketRequest(
     BaseModel, tag="ticketedRequest", nsmap=NSMAP, search_mode="unordered"
 ):
-    ticket: Optional[Ticket] = element(tag="ticket")
-    net: Optional[Net] = element(tag="net")
+    ticket: Optional[Ticket] = element(tag="ticket", default=None)
+    net: Optional[Net] = element(tag="net", default=None)

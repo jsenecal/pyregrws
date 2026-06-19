@@ -111,5 +111,5 @@ class TestAPI:
             match=[header_matcher({"Content-Type": "application/xml"})],
         )
 
-        new_insance = manager.create(**instance.dict())
+        new_insance = manager.create(**instance.model_dump())
         assert new_insance

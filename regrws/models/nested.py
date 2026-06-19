@@ -1,8 +1,8 @@
 from enum import IntEnum
 from typing import Literal, Optional
 
-from pydantic import root_validator
-from pydantic_xml.model import attr, element
+from pydantic import model_validator
+from pydantic_xml import attr, element
 
 from regrws.models.base import NSMAP, BaseModel
 from regrws.models.types import code2_type, code3_type
@@ -37,11 +37,11 @@ class Iso31661(BaseModel, tag="iso3166-1", nsmap=NSMAP, search_mode="unordered")
     code3: Optional[code3_type] = element(default=None)
     e164: Optional[int] = element(default=None)
 
-    @root_validator
-    def require_code2_or_code3(cls, values):
-        if values.get("code2") is None and values.get("code3") is None:
+    @model_validator(mode="after")
+    def require_code2_or_code3(self):
+        if self.code2 is None and self.code3 is None:
             raise ValueError("Either code2 or code3 must be specified")
-        return values
+        return self
 
 
 class MultiLineElement(BaseModel):
@@ -62,7 +62,7 @@ class PhoneType(BaseModel, tag="type", nsmap=NSMAP, search_mode="unordered"):
 class Phone(BaseModel, tag="phone", nsmap=NSMAP, search_mode="unordered"):
     type: PhoneType = element()
     number: str = element()
-    extension: str | None = element()
+    extension: str | None = element(default=None)
 
 
 class OriginAS(BaseModel, tag="originAS", nsmap=NSMAP, search_mode="unordered"):
