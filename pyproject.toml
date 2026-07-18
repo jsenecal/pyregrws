@@ -37,7 +37,7 @@ dev = [
   "lxml>=6.0.0,<7",
   "pytest-cov>=7.0.0,<8",
   "responses>=0.25.0,<0.26",
-  "ruff>=0.14.0,<0.15",
+  "ruff>=0.15.22,<0.16",
 ]
 
 [tool.pytest.ini_options]
