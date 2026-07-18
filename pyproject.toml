@@ -33,7 +33,7 @@ dev = [
   "pytest-xdist>=3.7.0,<4",
   "ipython>=9.0.0,<10",
   "pytest==9.0.3",
-  "xmldiff>=2.4,<3",
+  "xmldiff>=3,<4",
   "lxml>=6.0.0,<7",
   "pytest-cov>=7.0.0,<8",
   "responses>=0.25.0,<0.26",

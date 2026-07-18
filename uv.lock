@@ -729,7 +729,7 @@ dev = [
     { name = "pytest-xdist", specifier = ">=3.7.0,<4" },
     { name = "responses", specifier = ">=0.25.0,<0.26" },
     { name = "ruff", specifier = ">=0.15.22,<0.16" },
-    { name = "xmldiff", specifier = ">=2.4,<3" },
+    { name = "xmldiff", specifier = ">=3,<4" },
 ]
 
 [[package]]
@@ -894,15 +894,6 @@ wheels = [
 ]
 
 [[package]]
-name = "setuptools"
-version = "82.0.1"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/4f/db/cfac1baf10650ab4d1c111714410d2fbb77ac5a616db26775db562c8fab2/setuptools-82.0.1.tar.gz", hash = "sha256:7d872682c5d01cfde07da7bccc7b65469d3dca203318515ada1de5eda35efbf9", size = 1152316, upload-time = "2026-03-09T12:47:17.221Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/9d/76/f789f7a86709c6b087c5a2f52f911838cad707cc613162401badc665acfe/setuptools-82.0.1-py3-none-any.whl", hash = "sha256:a59e362652f08dcd477c78bb6e7bd9d80a7995bc73ce773050228a348ce2e5bb", size = 1006223, upload-time = "2026-03-09T12:47:15.026Z" },
-]
-
-[[package]]
 name = "stack-data"
 version = "0.6.3"
 source = { registry = "https://pypi.org/simple" }
@@ -1020,13 +1011,12 @@ wheels = [
 
 [[package]]
 name = "xmldiff"
-version = "2.7.0"
+version = "3.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "lxml" },
-    { name = "setuptools" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/55/d8/b31a4d75bc72d5c3a5adf5012405118169b56d163ebf407e4fc49a575e96/xmldiff-2.7.0.tar.gz", hash = "sha256:c0910b1f800366dd7ec62923e5d06e8b06a1bd9120569a1c27f4f2446b9c68a2", size = 87596, upload-time = "2024-05-13T12:15:48.996Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/dc/f5/c2200adb02cb64e5db05bd28fff1032d05d33ac632e3c781142a7aa61bcf/xmldiff-3.0.tar.gz", hash = "sha256:380ec4d05cef33f5b706cf789abcc848d27730d67e02dc0b4f1107e16ce9aaad", size = 86915, upload-time = "2026-06-11T15:00:06.656Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/2d/23/4c026139010faa8a48636fac190e9f8f830f850edca8e85f74123a58ed92/xmldiff-2.7.0-py3-none-any.whl", hash = "sha256:c8020e6aa4aa9fa13c72e5bf0eeafd0be998b0ab55d78b008abc75fbfebaca27", size = 43994, upload-time = "2024-05-13T12:15:46.459Z" },
+    { url = "https://files.pythonhosted.org/packages/72/be/b85bcfd17a163f05674b3c8586d60b9dc8a008f967090b652d3e138ed590/xmldiff-3.0-py3-none-any.whl", hash = "sha256:6310a765f895b3aa398d16c2283320ceb202f60ea47884495877199ce3a5017b", size = 42332, upload-time = "2026-06-11T15:00:04.815Z" },
 ]
