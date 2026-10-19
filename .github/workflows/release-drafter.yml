@@ -1,0 +1,25 @@
+name: Release Drafter
+
+on:
+  push:
+    branches:
+      - main
+  # pull_request_target is required so the autolabeler can label PRs,
+  # including ones from forks. The drafter never checks out or runs PR code.
+  pull_request_target:
+    types: [opened, reopened, synchronize, edited]
+
+permissions:
+  contents: read
+
+jobs:
+  update_release_draft:
+    name: Update Release Draft
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: release-drafter/release-drafter@v7
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
