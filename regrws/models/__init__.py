@@ -6,4 +6,4 @@ from regrws.models.net import Net
 from regrws.models.org import Org
 from regrws.models.poc import Poc
 
-__all__ = ["Customer", "Org", "Poc", "Net", "Error"]
+__all__ = ["Customer", "Error", "Net", "Org", "Poc"]

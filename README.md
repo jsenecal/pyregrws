@@ -42,7 +42,7 @@ from regrws.models import Poc, Org, Net, Customer
 # Initialize the API client
 api = Api(
     base_url="https://reg.arin.net/",  # Optional, defaults to ARIN production
-    api_key="your-api-key-here"           # Or set REGRWS_API_KEY env var
+    api_key="your-api-key-here",  # Or set REGRWS_API_KEY env var
 )
 
 # Retrieve a POC by handle
@@ -60,7 +60,7 @@ new_poc = api.poc.create(
     city="Anytown",
     iso3166_2="VA",
     postal_code="12345",
-    phones=[{"type": {"code": "O"}, "number": "555-123-4567"}]
+    phones=[{"type": {"code": "O"}, "number": "555-123-4567"}],
 )
 
 # Update and save changes
@@ -89,16 +89,10 @@ from regrws.api.core import Api
 from regrws.settings import Settings
 
 # Method 1: Pass parameters directly
-api = Api(
-    base_url="https://reg.arin.net/",
-    api_key="your-api-key"
-)
+api = Api(base_url="https://reg.arin.net/", api_key="your-api-key")
 
 # Method 2: Use Settings object
-settings = Settings(
-    base_url="https://reg.arin.net/",
-    api_key="your-api-key"
-)
+settings = Settings(base_url="https://reg.arin.net/", api_key="your-api-key")
 api = Api(settings=settings)
 ```
 
@@ -172,13 +166,13 @@ person_poc = api.poc.create(
     iso3166_1={"name": "United States", "code2": "US", "code3": "USA", "e164": "1"},
     street_address=[{"line": "456 Oak Ave"}, {"line": "Suite 100"}],
     city="Springfield",
-    iso3166_2="IL", 
+    iso3166_2="IL",
     postal_code="62701",
     phones=[
         {"type": {"code": "O"}, "number": "217-555-0123"},
-        {"type": {"code": "F"}, "number": "217-555-0124"}
+        {"type": {"code": "F"}, "number": "217-555-0124"},
     ],
-    comment=[{"line": "Technical contact for ACME Corp"}]
+    comment=[{"line": "Technical contact for ACME Corp"}],
 )
 
 # Create a role POC
@@ -191,7 +185,7 @@ role_poc = api.poc.create(
     city="Austin",
     iso3166_2="TX",
     postal_code="78701",
-    phones=[{"type": {"code": "O"}, "number": "512-555-0100"}]
+    phones=[{"type": {"code": "O"}, "number": "512-555-0100"}],
 )
 ```
 

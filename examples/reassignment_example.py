@@ -18,9 +18,9 @@ Requirements:
 
 import os
 import sys
-from ipaddress import IPv4Network, IPv6Network, ip_network
-from typing import Union, Optional, Literal
 from dataclasses import dataclass
+from ipaddress import IPv4Network, IPv6Network, ip_network
+from typing import Literal
 
 from regrws.api.core import Api
 from regrws.models import Customer, Error, Net
@@ -59,7 +59,7 @@ class ARINReassignmentTool:
             ),
         }
 
-    def find_network(self, network: Union[IPv4Network, IPv6Network]) -> Optional[Net]:
+    def find_network(self, network: IPv4Network | IPv6Network) -> Net | None:
         """
         Find an existing ARIN network record for the given IP network
 
@@ -97,7 +97,7 @@ class ARINReassignmentTool:
 
     def create_customer(
         self, customer_info: CustomerInfo, parent_net: Net
-    ) -> Optional[Customer]:
+    ) -> Customer | None:
         """
         Create a customer record for reassignment
 
@@ -147,7 +147,7 @@ class ARINReassignmentTool:
 
     def create_netblock(
         self,
-        network: Union[IPv4Network, IPv6Network],
+        network: IPv4Network | IPv6Network,
         block_type: Literal[
             "A",
             "AF",
@@ -187,7 +187,7 @@ class ARINReassignmentTool:
         )
 
     def generate_net_name(
-        self, network: Union[IPv4Network, IPv6Network], customer_name: str
+        self, network: IPv4Network | IPv6Network, customer_name: str
     ) -> str:
         """
         Generate a network name for the reassignment
@@ -205,10 +205,10 @@ class ARINReassignmentTool:
 
     def create_reassignment_net(
         self,
-        network: Union[IPv4Network, IPv6Network],
+        network: IPv4Network | IPv6Network,
         parent_net: Net,
         customer_handle: str,
-        net_name: Optional[str] = None,
+        net_name: str | None = None,
     ) -> Net:
         """
         Create a Net object for reassignment
@@ -240,9 +240,9 @@ class ARINReassignmentTool:
 
     def reassign_network(
         self,
-        network: Union[IPv4Network, IPv6Network],
+        network: IPv4Network | IPv6Network,
         customer_info: CustomerInfo,
-        parent_net_handle: Optional[str] = None,
+        parent_net_handle: str | None = None,
         dry_run: bool = False,
     ) -> bool:
         """

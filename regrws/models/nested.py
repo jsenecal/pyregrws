@@ -1,5 +1,5 @@
 from enum import IntEnum
-from typing import Literal, Optional
+from typing import Literal
 
 from pydantic import model_validator
 from pydantic_xml import attr, element
@@ -32,10 +32,10 @@ class IPVersionEnum(IntEnum):
 
 
 class Iso31661(BaseModel, tag="iso3166-1", nsmap=NSMAP, search_mode="unordered"):
-    name: Optional[str] = element(default=None)
-    code2: Optional[code2_type] = element(default=None)
-    code3: Optional[code3_type] = element(default=None)
-    e164: Optional[int] = element(default=None)
+    name: str | None = element(default=None)
+    code2: code2_type | None = element(default=None)
+    code3: code3_type | None = element(default=None)
+    e164: int | None = element(default=None)
 
     @model_validator(mode="after")
     def require_code2_or_code3(self):

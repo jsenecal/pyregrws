@@ -2,16 +2,15 @@
 
 from __future__ import annotations
 
-from typing import ClassVar, List
+from typing import ClassVar
 
 from pydantic_xml import element, wrapped
 
+from regrws.api.manager import BaseManager
 from regrws.models.base import NSMAP, BaseModel
 from regrws.models.nested import Iso31661, MultiLineElement
 from regrws.models.net import Net
 from regrws.models.types import iso3166_2_type
-
-from regrws.api.manager import BaseManager
 
 
 class CustomerManager(BaseManager):
@@ -45,14 +44,14 @@ class Customer(BaseModel, tag="customer", nsmap=NSMAP, search_mode="unordered"):
     customer_name: str = element(tag="customerName")
 
     iso3166_1: Iso31661
-    street_address: List[MultiLineElement] = wrapped(
+    street_address: list[MultiLineElement] = wrapped(
         "streetAddress", element(tag="line")
     )
     city: str = element()
     iso3166_2: iso3166_2_type | None = element(tag="iso3166-2", default=None)
     postal_code: str | None = element(tag="postalCode", default=None)
 
-    comment: List[MultiLineElement] | None = wrapped(
+    comment: list[MultiLineElement] | None = wrapped(
         "comment", element(tag="line"), default=None
     )
 

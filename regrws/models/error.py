@@ -1,6 +1,6 @@
 """Error Model"""
 
-from typing import List, Literal
+from typing import Literal
 
 from pydantic_xml import element, wrapped
 
@@ -31,7 +31,9 @@ class Error(BaseModel, tag="error", nsmap=NSMAP, search_mode="unordered"):
         "E_OUTAGE",
         "E_UNSPECIFIED",
     ] = element()
-    components: List[ErrorComponent] = wrapped("components", element(tag="component", default_factory=list))
-    additional_info: List[str] = wrapped(
+    components: list[ErrorComponent] = wrapped(
+        "components", element(tag="component", default_factory=list)
+    )
+    additional_info: list[str] = wrapped(
         "additionalInfo", element(tag="message", default_factory=list)
     )

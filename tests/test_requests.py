@@ -24,7 +24,7 @@ def test_invalid_model(cov):
     res.status_code = 200
     res._content = b'<org xmlns="http://www.arin.net/regrws/core/v1" ></org>'
     with pytest.raises(ValidationError) as exc:
-        res.instance
+        _ = res.instance
     exc.match("type=missing")
 
 
@@ -89,6 +89,6 @@ def test_requests_wrapper_with_errors(mocked_responses):
             RuntimeError,
             match=f"Parser for status code {res.status_code} is missing in session.",
         ):
-            res.instance
+            _ = res.instance
         with pytest.raises(requests.HTTPError):
             res.raise_for_unknown_status()

@@ -4,7 +4,7 @@ from responses.matchers import header_matcher
 
 from regrws.api import constants
 from regrws.api.core import Api
-from regrws.models import Poc, Net, Org
+from regrws.models import Net, Org, Poc
 from regrws.models.base import BaseModel
 
 from .payloads import (

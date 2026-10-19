@@ -1,12 +1,11 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Dict, Optional
+from typing import TYPE_CHECKING
 
 import requests
 
-from regrws.settings import Settings
-
 from regrws.api import constants
+from regrws.settings import Settings
 
 if TYPE_CHECKING:
     from regrws.models.types import xmlmodel_type
@@ -20,7 +19,7 @@ class Response(requests.Response):
     """
 
     def __init__(self, session: Session):
-        super(Response, self).__init__()
+        super().__init__()
         self._object: xmlmodel_type | None = None
         self.session = session
 
@@ -51,7 +50,7 @@ class Response(requests.Response):
         in the session's handlers dictionary.
         """
 
-        if self.status_code not in self.session.handlers.keys():
+        if self.status_code not in self.session.handlers:
             super().raise_for_status()
 
     @classmethod
@@ -72,9 +71,7 @@ class Session(requests.Session):
         headers: Optional additional headers to include in requests.
     """
 
-    def __init__(
-        self, handlers: Dict[int, xmlmodel_type], headers: Optional[dict] = None
-    ):
+    def __init__(self, handlers: dict[int, xmlmodel_type], headers: dict | None = None):
         super().__init__()
         self.handlers = handlers
         self.hooks["response"].append(self.response_hook)
@@ -137,7 +134,7 @@ class Api:
         )
 
         if settings is None:
-            kwargs = dict(base_url=constants.BASE_URL_DEFAULT)
+            kwargs = {"base_url": constants.BASE_URL_DEFAULT}
             if base_url is not None:
                 kwargs["base_url"] = base_url
             if api_key is not None:

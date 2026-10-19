@@ -114,7 +114,7 @@ def test_net_manager(mocked_responses, api: type[Api]):
     )
 
     with pytest.raises(NotImplementedError):
-        api.net.create(**dict())
+        api.net.create()
 
     instance = api.net.from_handle(handle="NET-10-0-0-0-1")
     assert instance is not None, "Instance should not be None"

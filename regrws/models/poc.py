@@ -1,4 +1,4 @@
-from typing import ClassVar, List, Literal, Optional
+from typing import ClassVar, Literal
 
 from pydantic import model_validator
 from pydantic_xml import attr, element, wrapped
@@ -28,31 +28,31 @@ class PocLinkRef(BaseModel, tag="pocLinkRef", nsmap=NSMAP, search_mode="unordere
 
 class Poc(BaseModel, tag="poc", nsmap=NSMAP, search_mode="unordered"):
     iso3166_1: Iso31661
-    street_address: List[MultiLineElement] = wrapped(
+    street_address: list[MultiLineElement] = wrapped(
         "streetAddress", element(tag="line")
     )
     city: str = element()
-    iso3166_2: Optional[iso3166_2_type] = element(tag="iso3166-2", default=None)
-    postal_code: Optional[str] = element(tag="postalCode", default=None)
+    iso3166_2: iso3166_2_type | None = element(tag="iso3166-2", default=None)
+    postal_code: str | None = element(tag="postalCode", default=None)
 
-    comment: Optional[List[MultiLineElement]] = wrapped(
+    comment: list[MultiLineElement] | None = wrapped(
         "comment", element(tag="line"), default=None
     )
 
-    handle: Optional[str] = element(default=None)
-    registration_date: Optional[str] = element(tag="registrationDate", default=None)
+    handle: str | None = element(default=None)
+    registration_date: str | None = element(tag="registrationDate", default=None)
 
     contact_type: Literal["PERSON", "ROLE"] = element(tag="contactType")
 
-    company_name: Optional[str] = element(tag="companyName", default=None)
+    company_name: str | None = element(tag="companyName", default=None)
 
-    first_name: Optional[str] = element(tag="firstName", default=None)
-    middle_name: Optional[str] = element(tag="middleName", default=None)
-    last_name: Optional[str] = element(tag="lastName", default=None)
+    first_name: str | None = element(tag="firstName", default=None)
+    middle_name: str | None = element(tag="middleName", default=None)
+    last_name: str | None = element(tag="lastName", default=None)
 
-    emails: List[str] = wrapped("emails", element(tag="email"))
+    emails: list[str] = wrapped("emails", element(tag="email"))
 
-    phones: List[Phone] = wrapped("phones", element(tag="phone"))
+    phones: list[Phone] = wrapped("phones", element(tag="phone"))
 
     _endpoint: ClassVar[str] = "/poc"
 

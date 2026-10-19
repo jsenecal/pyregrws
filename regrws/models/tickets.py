@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import List, Literal, Optional
+from typing import Literal
 
 from pydantic_xml import element, wrapped
 
@@ -25,13 +25,13 @@ class TicketMessage(
     message_id: str = element(tag="messageId", ns="mv1")
     created_date: str = element(tag="createdDate", ns="mv1")
     subject: str = element()
-    text: List[MultiLineElement] = wrapped("text", element(tag="line"))
+    text: list[MultiLineElement] = wrapped("text", element(tag="line"))
     category: str = element()
-    attachments: List[Attachment] = wrapped("attachments", element(tag="attachment"))
+    attachments: list[Attachment] = wrapped("attachments", element(tag="attachment"))
 
 
 class Ticket(BaseModel, tag="ticket", nsmap=TICKET_NSMAP, search_mode="unordered"):
-    messages: List[TicketMessage] = wrapped("messages", element(tag="message"))
+    messages: list[TicketMessage] = wrapped("messages", element(tag="message"))
     ticket_no: str = element(tag="ticketNo")
     shared: bool | None = element(ns="stv1", default=None)
     org_handle: str | None = element(tag="orgHandle", ns="stv1", default=None)
@@ -93,5 +93,5 @@ class Ticket(BaseModel, tag="ticket", nsmap=TICKET_NSMAP, search_mode="unordered
 class TicketRequest(
     BaseModel, tag="ticketedRequest", nsmap=NSMAP, search_mode="unordered"
 ):
-    ticket: Optional[Ticket] = element(tag="ticket", default=None)
-    net: Optional[Net] = element(tag="net", default=None)
+    ticket: Ticket | None = element(tag="ticket", default=None)
+    net: Net | None = element(tag="net", default=None)
