@@ -1,0 +1,85 @@
+name: Test
+
+on:
+  workflow_call:
+    inputs:
+      ref:
+        description: 'Git ref to checkout'
+        required: false
+        type: string
+    secrets:
+      CODECOV_TOKEN:
+        description: 'Codecov upload token'
+        required: false
+
+env:
+  # Lint against the oldest supported Python so mypy flags anything newer.
+  # The test matrix overrides this per job.
+  UV_PYTHON: "3.11"
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.ref || github.ref }}
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v10.3.0
+        with:
+          enable-cache: true
+
+      - name: Install dependencies
+        run: uv sync --locked
+
+      - name: Run ruff check
+        run: uv run ruff check .
+
+      - name: Run ruff format check
+        run: uv run ruff format --check .
+
+      # Targets come from [tool.mypy] files in pyproject.toml, so this matches
+      # what `uv run mypy` does locally.
+      - name: Run mypy
+        run: uv run mypy
+
+  test:
+    name: Test (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13", "3.14"]
+    env:
+      UV_PYTHON: ${{ matrix.python-version }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.ref || github.ref }}
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v10.3.0
+        with:
+          enable-cache: true
+
+      - name: Install dependencies
+        run: uv sync --locked
+
+      - name: Run tests
+        run: >-
+          uv run pytest -n 2
+          --cov=regrws --cov-report=xml --cov-report=term-missing
+
+      - name: Upload coverage reports
+        # One upload is enough; use the oldest supported Python
+        if: matrix.python-version == '3.11'
+        uses: codecov/codecov-action@v7
+        with:
+          files: ./coverage.xml
+          token: ${{ secrets.CODECOV_TOKEN }}
+          # A failed upload should be visible in the logs but must not fail the
+          # build. Do not add continue-on-error here: together the two hide
+          # genuine action failures.
+          fail_ci_if_error: false

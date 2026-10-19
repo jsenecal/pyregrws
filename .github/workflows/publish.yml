@@ -1,27 +1,48 @@
----
-name: Publish to PyPI
+name: Release
 
-'on':
+# Keep this file named publish.yml: the PyPI trusted publisher for pyregrws is
+# bound to this workflow filename and the `pypi` environment. Renaming either
+# breaks publishing until the publisher is updated on PyPI.
+
+on:
   release:
     types: [published]
 
 jobs:
+  test:
+    name: Test
+    uses: ./.github/workflows/test.yml
+    with:
+      ref: ${{ github.ref }}
+    # Reusable workflows do not inherit secrets from the caller
+    secrets: inherit
+
+  # PyPI does not accept a reusable workflow as a trusted publisher
+  # (https://docs.pypi.org/trusted-publishers/troubleshooting/), so publishing
+  # stays in this file.
   publish:
+    name: Publish to PyPI
     runs-on: ubuntu-latest
+    needs: test
     environment:
       name: pypi
       url: https://pypi.org/p/pyregrws
     permissions:
-      # IMPORTANT: mandatory for trusted publishing
+      contents: read
       id-token: write
     steps:
       - uses: actions/checkout@v7
 
       - name: Install uv
         uses: astral-sh/setup-uv@v10.3.0
+        with:
+          enable-cache: true
 
-      - name: Build package
+      - name: Build
         run: uv build
 
-      - name: Publish package to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
+      - name: Publish
+        # `always` rather than the default `automatic`: without an ambient OIDC
+        # token this must fail loudly, not fall back to looking for a password
+        # that is deliberately not configured.
+        run: uv publish --trusted-publishing always

@@ -1,0 +1,98 @@
+name-template: 'v$RESOLVED_VERSION'
+tag-template: 'v$RESOLVED_VERSION'
+
+categories:
+  # First, and above Breaking Changes: someone skimming release notes to decide
+  # whether they have to upgrade today should hit this before anything else.
+  - title: 'Security'
+    labels:
+      - 'security'
+  - title: 'Breaking Changes'
+    labels:
+      - 'breaking'
+  - title: 'Features'
+    labels:
+      - 'feature'
+      - 'enhancement'
+  - title: 'Bug Fixes'
+    labels:
+      - 'fix'
+      - 'bug'
+  - title: 'Performance'
+    labels:
+      - 'performance'
+  - title: 'Documentation'
+    labels:
+      - 'documentation'
+  - title: 'Dependencies'
+    labels:
+      - 'dependencies'
+  - title: 'Maintenance'
+    labels:
+      - 'chore'
+      - 'ci'
+      - 'refactor'
+
+exclude-labels:
+  - 'skip-changelog'
+
+autolabeler:
+  - label: 'breaking'
+    title:
+      - '/^[a-z]+(\(.+\))?!:/'
+  - label: 'feature'
+    title:
+      - '/^feat(\(.+\))?:/i'
+  - label: 'fix'
+    title:
+      - '/^fix(\(.+\))?:/i'
+  - label: 'performance'
+    title:
+      - '/^perf(\(.+\))?:/i'
+  - label: 'documentation'
+    title:
+      - '/^docs(\(.+\))?:/i'
+  - label: 'chore'
+    title:
+      - '/^(chore|style|test|build)(\(.+\))?:/i'
+  - label: 'ci'
+    title:
+      - '/^ci(\(.+\))?:/i'
+  - label: 'refactor'
+    title:
+      - '/^refactor(\(.+\))?:/i'
+  - label: 'dependencies'
+    branch:
+      - '/^renovate\//'
+      - '/^dependabot\//'
+
+version-resolver:
+  major:
+    labels:
+      - 'breaking'
+  minor:
+    labels:
+      - 'feature'
+      - 'enhancement'
+  patch:
+    labels:
+      - 'security'
+      - 'fix'
+      - 'bug'
+      - 'performance'
+      - 'documentation'
+      - 'dependencies'
+      - 'chore'
+      - 'ci'
+      - 'refactor'
+  default: patch
+
+change-template: '- $TITLE (#$NUMBER) @$AUTHOR'
+change-title-escapes: '\<*_&'
+
+template: |
+  ## What's Changed
+
+  $CHANGES
+
+  **Full Changelog**: https://github.com/$OWNER/$REPOSITORY/compare/$PREVIOUS_TAG...v$RESOLVED_VERSION
