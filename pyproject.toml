@@ -1,6 +1,7 @@
 [project]
 name = "pyregrws"
-version = "1.0.0"
+# Placeholder: the publish workflow sets the version from the release tag
+version = "0.0.0"
 description = "Python library to retrieve and modify records within ARIN's database through their Reg-RWS service"
 authors = [{ name = "Jonathan Senecal", email = "contact@jonathansenecal.com" }]
 license = "Apache-2.0"
