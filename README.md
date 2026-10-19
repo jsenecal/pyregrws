@@ -252,9 +252,18 @@ uv run pytest tests/test_api.py::TestAPI::test_manager_from_handle
 # Lint code
 uv run ruff check
 
-# Format code  
+# Format code
 uv run ruff format
+
+# Type check
+uv run mypy
 ```
+
+### Releasing
+
+[Release Drafter](https://github.com/release-drafter/release-drafter) keeps a draft GitHub release up to date as PRs merge. It groups changes by PR label and picks the next version from them: `breaking` bumps major, `feature`/`enhancement` bumps minor, and everything else bumps patch. PR titles in conventional-commit form (`feat:`, `fix:`, `chore:`, ...) are labelled automatically.
+
+To release, review the draft and publish it. Publishing runs the test suite and uploads the package to PyPI, using the release tag as the version (`pyproject.toml` only holds a `0.0.0` placeholder).
 
 ## Contributing
 

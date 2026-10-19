@@ -38,6 +38,11 @@ jobs:
         with:
           enable-cache: true
 
+      # The release tag is the source of truth for the version; pyproject.toml
+      # only holds a placeholder. uv rejects a tag that isn't valid PEP 440.
+      - name: Set version from release tag
+        run: uv version --frozen "${GITHUB_REF_NAME#v}"
+
       - name: Build
         run: uv build
 
