@@ -1,4 +1,4 @@
-from typing import ClassVar, Literal
+from typing import Any, ClassVar, Literal
 
 from pydantic import model_validator
 from pydantic_xml import attr, element, wrapped
@@ -58,7 +58,7 @@ class Poc(BaseModel, tag="poc", nsmap=NSMAP, search_mode="unordered"):
 
     @model_validator(mode="before")
     @classmethod
-    def check_contact_type_and_payload(cls, values):  # pragma: no cover
+    def check_contact_type_and_payload(cls, values: Any) -> Any:  # pragma: no cover
         contact_type = values.get("contact_type")
 
         if contact_type == "ROLE":

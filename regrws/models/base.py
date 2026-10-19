@@ -52,7 +52,7 @@ class BaseModel(BaseXmlModel):
             return f"{self._api.base_url}{self._endpoint}/"
         return None  # pragma: no cover
 
-    def save(self):
+    def save(self) -> BaseModel | None:
         """Save changes to this resource.
 
         Returns:
@@ -60,7 +60,7 @@ class BaseModel(BaseXmlModel):
         """
         return self._manager.save(self)
 
-    def delete(self):
+    def delete(self) -> BaseModel | None:
         """Delete this resource.
 
         Returns:
@@ -69,11 +69,11 @@ class BaseModel(BaseXmlModel):
         return self._manager.delete(self)
 
     @property
-    def manager(self):
+    def manager(self) -> BaseManager:
         return self._manager
 
     @manager.setter
-    def manager(self, manager: BaseManager):
+    def manager(self, manager: BaseManager) -> None:
         """Set the API Manager to the model instance.
 
         Args:

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Literal
+from typing import TYPE_CHECKING, Any, Literal, cast
 
 from regrws.api import constants
 from regrws.api.core import Response
@@ -27,9 +27,10 @@ class BaseManager:
         self.url_params = {"apikey": self.api.apikey.get_secret_value()}
 
     @property
-    def endpoint_url(self):
+    def endpoint_url(self) -> str | None:
         if self.api and self.model._endpoint:
             return f"{self.api.base_url}{self.model._endpoint}"
+        return None  # pragma: no cover
 
     def _do(
         self,
@@ -37,31 +38,35 @@ class BaseManager:
         url: str,
         data: bytes | None = None,
         return_type: type[BaseModel] | None = None,
-    ):
+    ) -> BaseModel | None:
         # prevent circular import
         from regrws.api.core import Session
         from regrws.models import Error
 
-        handlers = {200: return_type or self.model}
+        handlers: dict[int, type[BaseModel]] = {200: return_type or self.model}
         handlers.update({i: Error for i in [400, 401, 403, 404, 405, 406, 409]})
-        with Session(handlers) as session:  # type: ignore
+        with Session(handlers) as session:
             headers = {}
             if verb in ("post", "put"):
                 headers["Content-Type"] = constants.CONTENT_TYPE
             session_method = getattr(session, verb)
             res: Response = session_method(
                 url, headers=headers, params=self.url_params, data=data
-            )  # type: ignore
+            )
             res.raise_for_unknown_status()
 
-            if res.instance:
-                related_model = res.instance.__class__
-                res.instance.manager = related_model._manager_class(
+            # Every handler registered above is a regrws BaseModel
+            instance = cast("BaseModel | None", res.instance)
+            if instance:
+                related_model = instance.__class__
+                instance.manager = related_model._manager_class(
                     api=self.api, model=related_model
-                )  # type: ignore
-            return res.instance
+                )
+            return instance
 
-    def create(self, return_type: type[BaseModel] | None = None, *args, **kwargs):
+    def create(
+        self, return_type: type[BaseModel] | None = None, *args: Any, **kwargs: Any
+    ) -> BaseModel | None:
         """Create a new resource.
 
         Args:
@@ -79,12 +84,13 @@ class BaseManager:
             return self._do(
                 "post",
                 url,
-                instance.to_xml(encoding="UTF-8", skip_empty=True),  # type: ignore
+                instance.to_xml(encoding="UTF-8", skip_empty=True),  # type: ignore[arg-type]
                 return_type,
             )
+        return None  # pragma: no cover
 
     # retrieve
-    def from_handle(self, handle: str):
+    def from_handle(self, handle: str) -> BaseModel | None:
         """Retrieve a resource by its handle.
 
         Args:
@@ -97,9 +103,10 @@ class BaseManager:
             handle = handle.upper()
             url = self.endpoint_url + f"/{handle}"
             return self._do("get", url)
+        return None  # pragma: no cover
 
     # update
-    def save(self, instance: BaseModel):
+    def save(self, instance: BaseModel) -> BaseModel | None:
         """Update an existing resource.
 
         Args:
@@ -113,15 +120,16 @@ class BaseManager:
             return self._do(
                 "put",
                 url,
-                instance.to_xml(encoding="UTF-8", skip_empty=True),  # type: ignore
+                instance.to_xml(encoding="UTF-8", skip_empty=True),  # type: ignore[arg-type]
             )
+        return None  # pragma: no cover
 
     # delete
     def delete(
         self,
-        instance: type[BaseModel],
+        instance: BaseModel,
         return_type: type[BaseModel] | None = None,
-    ):
+    ) -> BaseModel | None:
         """Delete a resource.
 
         Args:
@@ -131,6 +139,7 @@ class BaseManager:
         Returns:
             The response from the delete operation or None if deletion failed.
         """
-        url = str(instance.absolute_url)
+        url = instance.absolute_url
         if url:
             return self._do("delete", url, return_type=return_type)
+        return None  # pragma: no cover

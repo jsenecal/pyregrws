@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from collections.abc import Mapping
+from typing import TYPE_CHECKING, Any
 
 import requests
 
@@ -8,7 +9,9 @@ from regrws.api import constants
 from regrws.settings import Settings
 
 if TYPE_CHECKING:
-    from regrws.models.types import xmlmodel_type
+    from pydantic_xml import BaseXmlModel
+
+    from regrws.models.base import BaseModel
 
 
 class Response(requests.Response):
@@ -20,11 +23,11 @@ class Response(requests.Response):
 
     def __init__(self, session: Session):
         super().__init__()
-        self._object: xmlmodel_type | None = None
+        self._object: BaseXmlModel | None = None
         self.session = session
 
     @property
-    def instance(self) -> xmlmodel_type | None:
+    def instance(self) -> BaseXmlModel | None:
         """Get pydantic_xml instance from request content.
 
         Returns:
@@ -35,7 +38,7 @@ class Response(requests.Response):
         """
         if not self._object:
             try:
-                model: xmlmodel_type = self.session.handlers[self.status_code]
+                model: type[BaseXmlModel] = self.session.handlers[self.status_code]
             except KeyError:
                 raise RuntimeError(
                     f"Parser for status code {self.status_code} is missing in session."
@@ -43,7 +46,7 @@ class Response(requests.Response):
             self._object = model.from_xml(self.content)
         return self._object
 
-    def raise_for_unknown_status(self):
+    def raise_for_unknown_status(self) -> None:
         """Raises :class:`HTTPError` for unknown status codes.
 
         Only raises an HTTPError if the status code is not registered
@@ -54,7 +57,7 @@ class Response(requests.Response):
             super().raise_for_status()
 
     @classmethod
-    def _from_response(cls, response, session: Session):
+    def _from_response(cls, response: requests.Response, session: Session) -> Response:
         pydantic_r = cls(session=session)
         pydantic_r.__dict__.update(response.__dict__)
         return pydantic_r
@@ -71,7 +74,11 @@ class Session(requests.Session):
         headers: Optional additional headers to include in requests.
     """
 
-    def __init__(self, handlers: dict[int, xmlmodel_type], headers: dict | None = None):
+    def __init__(
+        self,
+        handlers: Mapping[int, type[BaseXmlModel]],
+        headers: dict[str, str] | None = None,
+    ) -> None:
         super().__init__()
         self.handlers = handlers
         self.hooks["response"].append(self.response_hook)
@@ -79,7 +86,7 @@ class Session(requests.Session):
         if headers:
             self.headers.update(headers)  # pragma: no cover
 
-    def response_hook(self, response, **kwargs) -> Response:
+    def response_hook(self, response: requests.Response, **kwargs: Any) -> Response:
         """Replace request's Response with a regrws Response instance.
 
         This hook is automatically called for all responses and converts
@@ -124,7 +131,7 @@ class Api:
         base_url: str | None = None,
         api_key: str | None = None,
         settings: Settings | None = None,
-    ):
+    ) -> None:
         # avoid circular imports
         from regrws.models import (  # pylint: disable=import-outside-toplevel
             Customer,
@@ -144,7 +151,8 @@ class Api:
         self.base_url = f"{base_url.rstrip('/')}/rest"
         self.apikey = settings.api_key
 
-        for model in [Customer, Net, Org, Poc]:
+        models: list[type[BaseModel]] = [Customer, Net, Org, Poc]
+        for model in models:
             if hasattr(model, "_endpoint"):
                 manager = model._manager_class(api=self, model=model)
                 endpoint = model._endpoint[1:]  # Remove leading "/"

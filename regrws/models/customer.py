@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import ClassVar
+from typing import TYPE_CHECKING, Any, ClassVar, NoReturn
 
 from pydantic_xml import element, wrapped
 
@@ -12,14 +12,19 @@ from regrws.models.nested import Iso31661, MultiLineElement
 from regrws.models.net import Net
 from regrws.models.types import iso3166_2_type
 
+if TYPE_CHECKING:
+    from regrws.models.error import Error
+
 
 class CustomerManager(BaseManager):
     """Custom Manager for Customer Payloads"""
 
-    def create(self, *args, **kwargs):
+    def create(self, *args: Any, **kwargs: Any) -> NoReturn:
         raise NotImplementedError  # pragma: no cover
 
-    def create_for_net(self, net: Net, *args, **kwargs) -> Customer | None:
+    def create_for_net(
+        self, net: Net, *args: Any, **kwargs: Any
+    ) -> Customer | Error | None:
         """
         https://www.arin.net/resources/manage/regrws/methods/#create-recipient-customer
         """
@@ -28,10 +33,10 @@ class CustomerManager(BaseManager):
         url = net.absolute_url
         if url:
             url = url + "/customer"
-            return self._do(
+            return self._do(  # type: ignore[return-value]
                 "post",
                 url,
-                instance.to_xml(encoding="UTF-8", skip_empty=True),  # type: ignore
+                instance.to_xml(encoding="UTF-8", skip_empty=True),  # type: ignore[arg-type]
             )
         return None  # pragma: no cover
 
