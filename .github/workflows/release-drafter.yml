@@ -8,6 +8,8 @@ on:
   # including ones from forks. The drafter never checks out or runs PR code.
   pull_request_target:
     types: [opened, reopened, synchronize, edited]
+  # Rebuild the draft on demand, e.g. after relabelling merged PRs
+  workflow_dispatch:
 
 permissions:
   contents: read
