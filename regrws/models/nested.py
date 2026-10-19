@@ -1,5 +1,5 @@
 from enum import IntEnum
-from typing import Literal
+from typing import Literal, Self
 
 from pydantic import model_validator
 from pydantic_xml import attr, element
@@ -38,7 +38,7 @@ class Iso31661(BaseModel, tag="iso3166-1", nsmap=NSMAP, search_mode="unordered")
     e164: int | None = element(default=None)
 
     @model_validator(mode="after")
-    def require_code2_or_code3(self):
+    def require_code2_or_code3(self) -> Self:
         if self.code2 is None and self.code3 is None:
             raise ValueError("Either code2 or code3 must be specified")
         return self

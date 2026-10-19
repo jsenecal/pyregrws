@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import ClassVar
+from typing import Any, ClassVar
 
 from pydantic import HttpUrl
 from pydantic_xml import element, wrapped
@@ -14,7 +14,9 @@ from regrws.models.types import iso3166_2_type
 
 
 class OrgManager(BaseManager):
-    def create(self, return_type=Ticket, *args, **kwargs):
+    def create(
+        self, return_type: type[BaseModel] | None = Ticket, *args: Any, **kwargs: Any
+    ) -> BaseModel | None:
         return super().create(return_type, *args, **kwargs)
 
 

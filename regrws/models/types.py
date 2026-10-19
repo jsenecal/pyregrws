@@ -54,7 +54,7 @@ def _validate_ip_address(
             except ValueError:
                 pass
 
-    raise ValueError(f"Invalid IP address: {value}")
+    raise ValueError(f"Invalid IP address: {value!r}")
 
 
 ZeroPaddedIPvAnyAddress = Annotated[
