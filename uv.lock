@@ -715,7 +715,7 @@ dev = [
 requires-dist = [
     { name = "certifi", specifier = ">=2026.0.0,<2027" },
     { name = "pydantic", specifier = ">=2.0,<3" },
-    { name = "pydantic-settings", extras = ["dotenv"], specifier = ">=2.0,<3" },
+    { name = "pydantic-settings", specifier = ">=2.0,<3" },
     { name = "pydantic-xml", specifier = ">=2.0,<3" },
     { name = "requests", specifier = ">=2.28.1,<3" },
 ]
