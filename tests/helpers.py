@@ -1,5 +1,4 @@
 import difflib
-from typing import Union
 
 import xmldiff.actions
 import xmldiff.formatting
@@ -8,8 +7,8 @@ from lxml import etree
 
 
 def assert_xml_equal(
-    left: Union[str, bytes],
-    right: Union[str, bytes],
+    left: str | bytes,
+    right: str | bytes,
     *,
     ignore_comments: bool = True,
     pretty: bool = True,
@@ -39,4 +38,4 @@ def assert_xml_equal(
                 difflib.Differ().compare(left.splitlines(), right.splitlines())
             )
         else:
-            assert not diffs, "\n" + "\n".join((str(diff) for diff in diffs))
+            assert not diffs, "\n" + "\n".join(str(diff) for diff in diffs)

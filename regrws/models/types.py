@@ -1,5 +1,5 @@
 from ipaddress import IPv4Address, IPv6Address
-from typing import Annotated, Union
+from typing import Annotated
 
 from pydantic import Field
 from pydantic.functional_validators import BeforeValidator
@@ -26,8 +26,8 @@ cidr_length_type = Annotated[int, Field(ge=0, le=128)]
 
 
 def _validate_ip_address(
-    value: Union[str, bytes, int],
-) -> Union[IPv4Address, IPv6Address]:
+    value: str | bytes | int,
+) -> IPv4Address | IPv6Address:
     """Validate IP addresses, supporting both IPv4 and IPv6.
 
     ARIN returns zero-padded octets (e.g., 010.000.000.001) which Python 3.11+
@@ -58,6 +58,6 @@ def _validate_ip_address(
 
 
 ZeroPaddedIPvAnyAddress = Annotated[
-    Union[IPv4Address, IPv6Address],
+    IPv4Address | IPv6Address,
     BeforeValidator(_validate_ip_address),
 ]

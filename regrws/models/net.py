@@ -2,13 +2,12 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, ClassVar, List, Literal, Optional
+from typing import TYPE_CHECKING, ClassVar, Literal
 
 from pydantic import model_validator
 from pydantic_xml import element, wrapped
 
 from regrws.api.manager import BaseManager
-
 from regrws.models.base import NSMAP, BaseModel
 from regrws.models.nested import IPVersionEnum, MultiLineElement, OriginAS
 from regrws.models.poc import PocLinkRef
@@ -125,12 +124,12 @@ class NetBlock(BaseModel, tag="netBlock", nsmap=NSMAP, search_mode="unordered"):
         "RX",
         "S",
     ] = element()
-    description: Optional[str] = element(default=None)
+    description: str | None = element(default=None)
     start_address: ZeroPaddedIPvAnyAddress = element(tag="startAddress")
-    end_address: Optional[ZeroPaddedIPvAnyAddress] = element(
+    end_address: ZeroPaddedIPvAnyAddress | None = element(
         tag="endAddress", default=None
     )
-    cidr_length: Optional[cidr_length_type] = element(tag="cidrLength", default=None)
+    cidr_length: cidr_length_type | None = element(tag="cidrLength", default=None)
 
     @model_validator(mode="before")
     @classmethod
@@ -143,28 +142,28 @@ class NetBlock(BaseModel, tag="netBlock", nsmap=NSMAP, search_mode="unordered"):
 
 class Net(BaseModel, tag="net", nsmap=NSMAP, search_mode="unordered"):
     version: IPVersionEnum = element()
-    comment: Optional[List[MultiLineElement]] = wrapped(
+    comment: list[MultiLineElement] | None = wrapped(
         "comment", element(tag="line"), default=None
     )
 
-    org_handle: Optional[str] = element(tag="orgHandle", default=None)
-    customer_handle: Optional[str] = element(tag="customerHandle", default=None)
+    org_handle: str | None = element(tag="orgHandle", default=None)
+    customer_handle: str | None = element(tag="customerHandle", default=None)
 
-    handle: Optional[str] = element(default=None)
-    registration_date: Optional[str] = element(tag="registrationDate", default=None)
+    handle: str | None = element(default=None)
+    registration_date: str | None = element(tag="registrationDate", default=None)
 
-    net_name: Optional[str] = element(tag="netName", default=None)
-    net_blocks: Optional[List[NetBlock]] = wrapped(
+    net_name: str | None = element(tag="netName", default=None)
+    net_blocks: list[NetBlock] | None = wrapped(
         "netBlocks", element(tag="netBlock"), default=None
     )
 
-    parent_net_handle: Optional[str] = element(tag="parentNetHandle", default=None)
+    parent_net_handle: str | None = element(tag="parentNetHandle", default=None)
 
-    origin_ases: Optional[List[OriginAS]] = wrapped(
+    origin_ases: list[OriginAS] | None = wrapped(
         "originASes", element(tag="originAS"), default=None
     )
 
-    poc_links: Optional[List[PocLinkRef]] = wrapped(
+    poc_links: list[PocLinkRef] | None = wrapped(
         "pocLinks", element(tag="pocLinkRef"), default=None
     )
 
@@ -175,7 +174,7 @@ class Net(BaseModel, tag="net", nsmap=NSMAP, search_mode="unordered"):
     @classmethod
     def check_related_handle(cls, values):  # pragma: no cover
         results = values.get("org_handle"), values.get("customer_handle")
-        results_are_none = map(lambda x: x is None, results)
+        results_are_none = (x is None for x in results)
         if all(results_are_none):
             raise ValueError(
                 "either `org_handle` or `customer_handle` must be provided"
